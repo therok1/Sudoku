@@ -6,6 +6,7 @@
 Button::Button(int Width, int Height, int PositionX, int PositionY, float AnchorX, float AnchorY, float PercentX, float PercentY, const std::string& Image)
 {
 	m_Selected = false;
+	m_Texture = nullptr;
 
 	m_Colour = { 0, 0, 0, 255 };
 	m_HoverColour = { 0, 0, 0, 255 };
