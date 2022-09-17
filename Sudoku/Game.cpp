@@ -9,8 +9,8 @@ Game::Game()
 {
 	m_Running = true;
 
-	Start = new Button(200, 50, 640, 360, 0.5f, 0.5f);
-	Start->SetColour({ 255, 0, 0, 255 });
+	Buttons.push_back(Start = new Button(200, 50, 640, 360, 0.5f, 0.5f));
+	Start->SetColour({ 255, 255, 255, 255 });
 }
 
 void Game::Tick()
@@ -31,6 +31,17 @@ void Game::EventLoop()
 		case SDL_QUIT: 
 			m_Running = false;
 			break;
+		case SDL_MOUSEBUTTONUP:
+			if (Event.button.button == SDL_BUTTON_LEFT)
+			{
+				for (auto Button : Buttons)
+				{
+					if (Button->GetFocusable())
+					{
+						Button->MouseRelease();
+					}
+				}
+			}
 		default:
 			break; 
 		}

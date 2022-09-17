@@ -13,9 +13,12 @@ public:
 
 	void Update();
 	void Render();
+	void MouseRelease();
 	
 	void SetColour(SDL_Color Colour);
 	void SetFocusable(bool Focusable);
+
+	bool GetFocusable();
 
 private:
 
@@ -26,7 +29,7 @@ private:
 
 	// Properties
 
-	SDL_Color m_Colour, m_HoverColour;
+	SDL_Color m_Colour, m_HoverColour, m_ClickColour;
 
 	bool m_Focusable;
 

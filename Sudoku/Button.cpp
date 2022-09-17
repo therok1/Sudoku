@@ -9,6 +9,7 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 
 	m_Colour = { 0, 0, 0, 255 };
 	m_HoverColour = { 0, 0, 0, 255 };
+	m_ClickColour = { 0, 0, 0, 255 };
 	m_Focusable = true;
 
 	if (!Image.empty())
@@ -61,9 +62,29 @@ void Button::Render()
 	}
 	else
 	{
-		!m_Selected ? SDL_SetRenderDrawColor(Window::m_Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a) : SDL_SetRenderDrawColor(Window::m_Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
+		SDL_SetRenderDrawColor(Window::m_Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a);
+
+		if (m_Selected)
+		{
+			SDL_SetRenderDrawColor(Window::m_Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
+
+			// If left mouse click is pressed
+			if ((Game::m_MouseButtons & SDL_BUTTON_LMASK) != 0)
+			{
+				SDL_SetRenderDrawColor(Window::m_Renderer, m_ClickColour.r, m_ClickColour.g, m_ClickColour.b, m_ClickColour.a);
+			}
+		}
+		
 		SDL_RenderFillRect(Window::m_Renderer, &dst);
 		SDL_SetRenderDrawColor(Window::m_Renderer, 0, 0, 0, 255);
+	}
+}
+
+void Button::MouseRelease()
+{
+	if (SDL_PointInRect(&Game::m_MouseCoords, &dst))
+	{
+		
 	}
 }
 
@@ -71,12 +92,23 @@ void Button::SetColour(SDL_Color Colour)
 {
 	m_Colour = Colour;
 	m_HoverColour = Colour;
-	m_HoverColour.r = m_HoverColour.r * 0.75f;
-	m_HoverColour.g = m_HoverColour.g * 0.75f;
-	m_HoverColour.b = m_HoverColour.b * 0.75f;
+	m_ClickColour = Colour;
+
+	m_HoverColour.r = m_HoverColour.r * 0.9f;
+	m_HoverColour.g = m_HoverColour.g * 0.9f;
+	m_HoverColour.b = m_HoverColour.b * 0.9f;
+
+	m_ClickColour.r = m_ClickColour.r * 0.75f;
+	m_ClickColour.g = m_ClickColour.g * 0.75f;
+	m_ClickColour.b = m_ClickColour.b * 0.75f;
 }
 
 void Button::SetFocusable(bool Focusable)
 {
 	m_Focusable = Focusable;
+}
+
+bool Button::GetFocusable()
+{
+	return m_Focusable;
 }

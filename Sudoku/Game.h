@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <SDL.h>
+#include <vector>
 
 #include "Button.h"
 
@@ -24,6 +25,8 @@ public:
 private:
 
 	bool m_Running;
+
+	std::vector<Button*> Buttons;
 
 	Button* Start;
 };
