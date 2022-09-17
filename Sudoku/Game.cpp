@@ -10,6 +10,7 @@ Game::Game()
 	m_Running = true;
 
 	Start = new Button(200, 50, 640, 360, 0.5f, 0.5f);
+	Start->SetColour({ 255, 0, 0, 255 });
 }
 
 void Game::Tick()

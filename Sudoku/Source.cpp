@@ -16,6 +16,8 @@ int main(int argc, char** args)
 		return 1;
 	}
 
+	SDL_SetRenderDrawColor(Window::m_Renderer, 0, 0, 0, 255);
+
 	while (GameObj->GetRunning())
 	{
 		GameObj->Tick();

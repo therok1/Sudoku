@@ -7,6 +7,10 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 {
 	m_Selected = false;
 
+	m_Colour = { 0, 0, 0, 255 };
+	m_HoverColour = { 0, 0, 0, 255 };
+	m_Focusable = true;
+
 	if (!Image.empty())
 	{
 		static SDL_Texture* Texture = IMG_LoadTexture(Window::m_Renderer, Image.c_str());
@@ -36,13 +40,16 @@ Button::~Button()
 
 void Button::Update()
 {
-	if (SDL_PointInRect(&Game::m_MouseCoords, &dst))
+	if (m_Focusable)
 	{
-		m_Selected = true;
-	}
-	else
-	{
-		m_Selected = false;
+		if (SDL_PointInRect(&Game::m_MouseCoords, &dst))
+		{
+			m_Selected = true;
+		}
+		else
+		{
+			m_Selected = false;
+		}
 	}
 }
 
@@ -54,8 +61,22 @@ void Button::Render()
 	}
 	else
 	{
-		SDL_SetRenderDrawColor(Window::m_Renderer, 255, 0, 0, 255);
+		!m_Selected ? SDL_SetRenderDrawColor(Window::m_Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a) : SDL_SetRenderDrawColor(Window::m_Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
 		SDL_RenderFillRect(Window::m_Renderer, &dst);
-		SDL_SetRenderDrawColor(Window::m_Renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(Window::m_Renderer, 0, 0, 0, 255);
 	}
+}
+
+void Button::SetColour(SDL_Color Colour)
+{
+	m_Colour = Colour;
+	m_HoverColour = Colour;
+	m_HoverColour.r = m_HoverColour.r * 0.75f;
+	m_HoverColour.g = m_HoverColour.g * 0.75f;
+	m_HoverColour.b = m_HoverColour.b * 0.75f;
+}
+
+void Button::SetFocusable(bool Focusable)
+{
+	m_Focusable = Focusable;
 }

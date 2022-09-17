@@ -13,6 +13,9 @@ public:
 
 	void Update();
 	void Render();
+	
+	void SetColour(SDL_Color Colour);
+	void SetFocusable(bool Focusable);
 
 private:
 
@@ -20,6 +23,12 @@ private:
 	SDL_Rect dst;
 
 	bool m_Selected;
+
+	// Properties
+
+	SDL_Color m_Colour, m_HoverColour;
+
+	bool m_Focusable;
 
 };
 
