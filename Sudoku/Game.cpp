@@ -36,6 +36,7 @@ void Game::EventLoop()
 		{
 		case SDL_QUIT: 
 			m_Running = false;
+
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
