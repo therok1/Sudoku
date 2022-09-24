@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL.h>
+#include <time.h>
 
 #include "Game.h"
 #include "Window.h"
@@ -8,6 +9,8 @@ bool init();
 
 int main(int argc, char** args)
 {
+	srand(time(nullptr));
+
 	Window* WindowObj = new Window();
 	Game* GameObj = new Game();
 

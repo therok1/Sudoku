@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Button.h"
+#include "Sudoku.h"
 
 class Game
 {

@@ -11,6 +11,12 @@ Game::Game()
 
 	Buttons.push_back(Start = new Button(200, 50, 640, 360, 0.5f, 0.5f));
 	Start->SetColour({ 255, 255, 255, 255 });
+
+	Sudoku Board;
+	Board.CreateSeed();
+	Board.GeneratePuzzle();
+	Board.CalculateDifficulty();
+	Board.PrintGrid();
 }
 
 void Game::Tick()
