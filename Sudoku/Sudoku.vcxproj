@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Sudoku.h" />

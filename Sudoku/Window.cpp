@@ -5,6 +5,7 @@
 
 SDL_Window* Window::m_Window = nullptr;
 SDL_Renderer* Window::m_Renderer = nullptr;
+
 int Window::m_Width = SCREEN_WIDTH;
 int Window::m_Height = SCREEN_HEIGHT;
 

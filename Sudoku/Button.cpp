@@ -3,6 +3,22 @@
 #include "Game.h"
 #include "Window.h"
 
+Button::Button(int Width, int Height)
+{
+	m_Selected = false;
+	m_Texture = nullptr;
+
+	m_Colour = { 0, 0, 0, 255 };
+	m_HoverColour = { 0, 0, 0, 255 };
+	m_ClickColour = { 0, 0, 0, 255 };
+	m_Focusable = true;
+
+	dst.w = Width;
+	dst.h = Height;
+	dst.x = 0;
+	dst.y = 0;
+}
+
 Button::Button(int Width, int Height, int PositionX, int PositionY, float AnchorX, float AnchorY, float PercentX, float PercentY, const std::string& Image)
 {
 	m_Selected = false;
@@ -37,7 +53,10 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 
 Button::~Button()
 {
-
+	if (m_Texture)
+	{
+		SDL_DestroyTexture(m_Texture);
+	}
 }
 
 void Button::Update()
@@ -109,7 +128,22 @@ void Button::SetFocusable(bool Focusable)
 	m_Focusable = Focusable;
 }
 
-bool Button::GetFocusable()
+void Button::SetX(int PositionX)
+{
+	dst.x = PositionX;
+}
+
+void Button::SetY(int PositionY)
+{
+	dst.y = PositionY;
+}
+
+bool Button::GetFocusable() const
 {
 	return m_Focusable;
+}
+
+SDL_Rect Button::GetRect() const
+{
+	return dst;
 }

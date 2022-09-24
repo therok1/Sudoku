@@ -8,6 +8,7 @@ class Button
 {
 public:
 
+	Button(int Width, int Height);
 	Button(int Width, int Height, int PositionX, int PositionY, float AnchorX = 0.f, float AnchorY = 0.f, float PercentX = 0.f, float PercentY = 0.f, const std::string& Image = "");
 	~Button();
 
@@ -17,8 +18,12 @@ public:
 	
 	void SetColour(SDL_Color Colour);
 	void SetFocusable(bool Focusable);
+	void SetX(int PositionX);
+	void SetY(int PositionY);
 
-	bool GetFocusable();
+	bool GetFocusable() const;
+
+	SDL_Rect GetRect() const;
 
 private:
 

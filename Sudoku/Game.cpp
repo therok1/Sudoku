@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include "Window.h"
-
 Uint32 Game::m_MouseButtons = Uint32();
 SDL_Point Game::m_MouseCoords = SDL_Point();
 
@@ -9,19 +7,37 @@ Game::Game()
 {
 	m_Running = true;
 
-	Buttons.push_back(Start = new Button(200, 50, 640, 360, 0.5f, 0.5f));
+	Start = std::make_unique<Button>(200, 50, 640, 360, 0.5f, 0.5f);
 	Start->SetColour({ 255, 255, 255, 255 });
 
-	Sudoku Board;
-	Board.CreateSeed();
-	Board.GeneratePuzzle();
-	Board.CalculateDifficulty();
-	Board.PrintGrid();
+	m_Buttons.push_back(std::move(Start));
+
+	Sudoku Sudoku;
+	Sudoku.CreateSeed();
+	Sudoku.GeneratePuzzle();
+	Sudoku.CalculateDifficulty();
+	Sudoku.PrintGrid();
+
+	SDL_Color PrimaryColor = { 255, 0, 0, 255 };
+	SDL_Color SecondaryColor = { 200, 0, 0, 255 };
+
+	Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
+	Grid->GenerateBoard();
+}
+
+Game::~Game()
+{
+
 }
 
 void Game::Tick()
 {
-	Start->Update();
+	for (const auto& Button : m_Buttons)
+	{
+		Button->Update();
+	}
+
+	Grid->Update();
 }
 
 void Game::EventLoop()
@@ -41,7 +57,7 @@ void Game::EventLoop()
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
 			{
-				for (auto Button : Buttons)
+				for (const auto& Button : m_Buttons)
 				{
 					if (Button->GetFocusable())
 					{
@@ -59,12 +75,17 @@ void Game::Render()
 {
 	SDL_RenderClear(Window::m_Renderer);
 
-	Start->Render();
+	for (const auto& Button : m_Buttons)
+	{
+		Button->Render();
+	}
+
+	Grid->Render();
 
 	SDL_RenderPresent(Window::m_Renderer);
 }
 
-bool Game::GetRunning()
+bool Game::GetRunning() const
 {
 	return m_Running;
 }
