@@ -3,6 +3,8 @@
 #include <iostream>
 #include <SDL.h>
 #include <vector>
+#include <map>
+#include <string>
 #include <memory>
 
 #include "Window.h"
@@ -31,7 +33,7 @@ private:
 
 	bool m_Running;
 
-	std::vector<std::unique_ptr<Button>> m_Buttons;
+	std::map<std::string, std::unique_ptr<Button>> m_Buttons;
 
 	std::unique_ptr<Button> Start;
 	std::unique_ptr<Board> Grid;

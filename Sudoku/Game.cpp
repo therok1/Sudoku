@@ -10,7 +10,7 @@ Game::Game()
 	Start = std::make_unique<Button>(200, 50, 640, 360, 0.5f, 0.5f);
 	Start->SetColour({ 255, 255, 255, 255 });
 
-	m_Buttons.push_back(std::move(Start));
+	m_Buttons.emplace("Start", std::move(Start));
 
 	Sudoku Sudoku;
 	Sudoku.CreateSeed();
@@ -23,6 +23,9 @@ Game::Game()
 
 	Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
 	Grid->GenerateBoard();
+	Grid->SetX(0, true, 0.5);
+	Grid->SetY(0, true, 0.5);
+	Grid->SetAnchorPoint(0.5f, 0.5f);
 }
 
 Game::~Game()
@@ -34,7 +37,7 @@ void Game::Tick()
 {
 	for (const auto& Button : m_Buttons)
 	{
-		Button->Update();
+		Button.second->Update();
 	}
 
 	Grid->Update();
@@ -59,9 +62,9 @@ void Game::EventLoop()
 			{
 				for (const auto& Button : m_Buttons)
 				{
-					if (Button->GetFocusable())
+					if (Button.second->GetFocusable())
 					{
-						Button->MouseRelease();
+						Button.second->MouseRelease();
 					}
 				}
 			}
@@ -75,12 +78,12 @@ void Game::Render()
 {
 	SDL_RenderClear(Window::m_Renderer);
 
+	Grid->Render();
+
 	for (const auto& Button : m_Buttons)
 	{
-		Button->Render();
+		Button.second->Render();
 	}
-
-	Grid->Render();
 
 	SDL_RenderPresent(Window::m_Renderer);
 }
