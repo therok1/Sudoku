@@ -28,6 +28,8 @@ Game::Game()
 	Sudoku.CalculateDifficulty();
 	Sudoku.PrintGrid();
 
+	Text = std::make_unique<DynamicText>(0, 0, "8", 32, "Assets/Fonts/CascadiaCode.ttf");
+
 	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
 	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
 
@@ -89,6 +91,7 @@ void Game::Render()
 	SDL_RenderClear(Window::m_Renderer);
 
 	Grid->Render();
+	Text->Render();
 
 	for (const auto& Button : m_Buttons)
 	{

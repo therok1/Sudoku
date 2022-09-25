@@ -12,18 +12,22 @@ public:
 	Button(int Width, int Height, int PositionX, int PositionY, float AnchorX = 0.f, float AnchorY = 0.f, float PercentX = 0.f, float PercentY = 0.f, const std::string& Image = "");
 	~Button();
 
+	// Main Functions
+
 	void Update();
 	void Render();
-
 	bool MouseRelease(enum GameState State, enum GameState DesiredState);
 	
+	// Setter Functions
+
 	void SetColour(SDL_Color Colour);
 	void SetFocusable(bool Focusable);
 	void SetX(int PositionX);
 	void SetY(int PositionY);
 
-	bool GetFocusable() const;
+	// Getter Functions
 
+	bool GetFocusable() const;
 	SDL_Rect GetRect() const;
 
 private:
@@ -31,12 +35,10 @@ private:
 	SDL_Texture* m_Texture;
 	SDL_Rect dst;
 
-	bool m_Selected;
-
 	// Properties
 
 	SDL_Color m_Colour, m_HoverColour, m_ClickColour;
-
+	bool m_Selected;
 	bool m_Focusable;
 
 };

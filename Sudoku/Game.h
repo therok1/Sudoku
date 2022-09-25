@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "Sudoku.h"
 #include "Board.h"
+#include "DynamicText.h"
 
 enum GameState
 {
@@ -26,28 +27,42 @@ public:
 	Game();
 	~Game();
 
+	// Main Functions
+
 	void Tick();
 	void EventLoop();
 	void Render();
 
+	// Getter Functions
+
 	bool GetRunning() const;
 
-	static SDL_Point m_MouseCoords;
+	// Mouse Properties
 
+	static SDL_Point m_MouseCoords;
 	static Uint32 m_MouseButtons;
 
 private:
 
-	bool m_Running;
+	// Properties
 
-	std::map<std::string, std::unique_ptr<Button>> m_Buttons;
+	bool m_Running;
+	GameState m_State;
+
+	// Menu Buttons
 
 	std::unique_ptr<Button> Start;
 	std::unique_ptr<Button> Settings;
 	std::unique_ptr<Button> Quit;
 
-	std::unique_ptr<Board> Grid;
+	std::map<std::string, std::unique_ptr<Button>> m_Buttons;
 
-	GameState m_State;
+	// Text Labels
+
+	std::unique_ptr<DynamicText> Text;
+
+	// Sudoku Grid
+
+	std::unique_ptr<Board> Grid;
 };
 
