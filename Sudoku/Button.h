@@ -14,7 +14,8 @@ public:
 
 	void Update();
 	void Render();
-	void MouseRelease();
+
+	bool MouseRelease(enum GameState State, enum GameState DesiredState);
 	
 	void SetColour(SDL_Color Colour);
 	void SetFocusable(bool Focusable);

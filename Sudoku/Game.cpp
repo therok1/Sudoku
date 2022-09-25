@@ -7,10 +7,20 @@ Game::Game()
 {
 	m_Running = true;
 
-	Start = std::make_unique<Button>(200, 50, 640, 360, 0.5f, 0.5f);
+	m_State = InMenu;
+
+	Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
 	Start->SetColour({ 255, 255, 255, 255 });
 
+	Settings = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f);
+	Settings->SetColour({ 255, 255, 255, 255 });
+
+	Quit = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
+	Quit->SetColour({ 255, 255, 255, 255 });
+
 	m_Buttons.emplace("Start", std::move(Start));
+	m_Buttons.emplace("Settings", std::move(Settings));
+	m_Buttons.emplace("Quit", std::move(Quit));
 
 	Sudoku Sudoku;
 	Sudoku.CreateSeed();
@@ -18,8 +28,8 @@ Game::Game()
 	Sudoku.CalculateDifficulty();
 	Sudoku.PrintGrid();
 
-	SDL_Color PrimaryColor = { 255, 0, 0, 255 };
-	SDL_Color SecondaryColor = { 200, 0, 0, 255 };
+	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
+	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
 
 	Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
 	Grid->GenerateBoard();
@@ -60,11 +70,11 @@ void Game::EventLoop()
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
 			{
-				for (const auto& Button : m_Buttons)
+				if (m_Buttons["Quit"]->GetFocusable())
 				{
-					if (Button.second->GetFocusable())
+					if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
 					{
-						Button.second->MouseRelease();
+						m_Running = false;
 					}
 				}
 			}

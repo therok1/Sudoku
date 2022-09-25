@@ -100,12 +100,9 @@ void Button::Render()
 	}
 }
 
-void Button::MouseRelease()
+bool Button::MouseRelease(GameState State, GameState DesiredState)
 {
-	if (SDL_PointInRect(&Game::m_MouseCoords, &dst))
-	{
-		
-	}
+	return (State == DesiredState) ? SDL_PointInRect(&Game::m_MouseCoords, &dst) : false;
 }
 
 void Button::SetColour(SDL_Color Colour)
