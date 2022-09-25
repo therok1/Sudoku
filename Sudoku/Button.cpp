@@ -83,7 +83,7 @@ void Button::Render()
 	else
 	{
 		SDL_SetRenderDrawColor(Window::m_Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a);
-
+		
 		if (m_Selected)
 		{
 			SDL_SetRenderDrawColor(Window::m_Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);

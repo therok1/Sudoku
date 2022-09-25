@@ -8,7 +8,7 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	m_Position.X = m_Position.Y = 0;
 	m_SqSize.X = m_SqSize.Y = 50;
 
-	for (int i = 0; i < pow(m_Size, 2); i++)
+	for (int i = 0; i < Size; i++)
 	{
 		m_Buttons.push_back(std::make_unique<Button>(m_SqSize.X, m_SqSize.Y));
 
@@ -34,13 +34,13 @@ void Board::GenerateBoard()
 {
 	int Index = 0;
 
-	for (int i = 0; i < m_Size; i++)
+	for (int j = 0; j < m_Size; j++)
 	{
-		for (int j = 0; j < m_Size; j++)
+		for (int i = 0; i < m_Size; i++)
 		{
 			m_Buttons[Index]->SetX(m_Buttons[i]->GetRect().w * i);
 			m_Buttons[Index]->SetY(m_Buttons[i]->GetRect().h * j);
-			
+
 			Index++;
 		}
 	}
@@ -66,9 +66,9 @@ void Board::SetX(int PositionX, bool A, float PercentX)
 {
 	int Index = 0;
 
-	for (int i = 0; i < m_Size; i++)
+	for (int j = 0; j < m_Size; j++)
 	{
-		for (int j = 0; j < m_Size; j++)
+		for (int i = 0; i < m_Size; i++)
 		{
 			if (!A)
 			{
@@ -90,9 +90,9 @@ void Board::SetY(int PositionY, bool A, float PercentY)
 {
 	int Index = 0;
 
-	for (int i = 0; i < m_Size; i++)
+	for (int j = 0; j < m_Size; j++)
 	{
-		for (int j = 0; j < m_Size; j++)
+		for (int i = 0; i < m_Size; i++)
 		{
 			if (!A)
 			{
@@ -114,7 +114,7 @@ void Board::SetAnchorPoint(float AnchorX, float AnchorY)
 {
 	m_AnchorPoint.X = AnchorX;
 	m_AnchorPoint.Y = AnchorY;
-	
+
 	SetX(m_Position.X);
 	SetY(m_Position.Y);
 }
