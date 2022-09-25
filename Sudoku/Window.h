@@ -13,7 +13,6 @@ public:
 	// Initialise Functions
 
 	bool InitialiseWindow();
-	SDL_Renderer* CreateRenderer();
 
 	// Window and Renderer Pointers
 
