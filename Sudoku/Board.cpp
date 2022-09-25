@@ -8,17 +8,24 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	m_Position.X = m_Position.Y = 0;
 	m_SqSize.X = m_SqSize.Y = 50;
 
-	for (int i = 0; i < Size; i++)
-	{
-		m_Buttons.push_back(std::make_unique<Button>(m_SqSize.X, m_SqSize.Y));
+	int Index = 0;
 
-		if (i % 2)
+	for (int i = 0; i < m_Size; i++)
+	{
+		for (int j = 0; j < m_Size; j++)
 		{
-			m_Buttons[i]->SetColour(PrimaryColour);
-		}
-		else
-		{
-			m_Buttons[i]->SetColour(SecondaryColour);
+			m_Buttons.push_back(std::make_unique<Button>(m_SqSize.X, m_SqSize.Y));
+
+			if (i % 2 == j % 2)
+			{
+				m_Buttons[Index]->SetColour(PrimaryColour);
+			}
+			else
+			{
+				m_Buttons[Index]->SetColour(SecondaryColour);
+			}
+
+			Index++;
 		}
 	}
 
