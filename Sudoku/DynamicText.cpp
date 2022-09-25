@@ -35,7 +35,7 @@ void DynamicText::Render()
 		std::cout << "Couldn't create surface: " << TTF_GetError() << std::endl;
 	}
 	
-	m_Texture = SDL_CreateTextureFromSurface(Window::m_Renderer, m_Surface);
+	m_Texture = SDL_CreateTextureFromSurface(Manager::Renderer, m_Surface);
 
 	if (m_Texture == nullptr)
 	{
@@ -45,7 +45,7 @@ void DynamicText::Render()
 	TTF_SizeText(m_Font, m_Message.c_str(), &dst.w, &dst.h);
 
 	SDL_FreeSurface(m_Surface);
-	SDL_RenderCopy(Window::m_Renderer, m_Texture, nullptr, &dst);
+	SDL_RenderCopy(Manager::Renderer, m_Texture, nullptr, &dst);
 
 	if (m_Texture != nullptr)
 	{

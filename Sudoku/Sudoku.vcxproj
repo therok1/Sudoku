@@ -142,7 +142,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sudoku.cpp" />
     <ClCompile Include="DynamicText.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Sudoku.h" />
     <ClInclude Include="DynamicText.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

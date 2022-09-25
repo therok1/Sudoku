@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "Game.h"
-#include "Window.h"
+#include "Manager.h"
 
 bool init();
 
@@ -14,16 +14,14 @@ int main(int argc, char** args)
 {
 	srand(time(nullptr));
 
-	std::unique_ptr<Window> WindowObj = std::make_unique<Window>();
-
-	if (!WindowObj->InitialiseWindow() || !init())
+	if (!Manager::InitialiseWindow(1280, 720, "Sudoku") || !init())
 	{
 		return 1;
 	}
 
 	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
 
-	SDL_SetRenderDrawColor(Window::m_Renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(Manager::Renderer, 0, 0, 0, 255);
 
 	while (GameObj->GetRunning())
 	{

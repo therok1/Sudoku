@@ -6,7 +6,7 @@
 #include <SDL_ttf.h>
 #include <string>
 
-#include "Window.h"
+#include "Manager.h"
 
 class DynamicText
 {

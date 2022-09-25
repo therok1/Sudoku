@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 
-#include "Window.h"
+#include "Manager.h"
 #include "Button.h"
 #include "Sudoku.h"
 #include "Board.h"
@@ -36,11 +36,6 @@ public:
 	// Getter Functions
 
 	bool GetRunning() const;
-
-	// Mouse Properties
-
-	static SDL_Point m_MouseCoords;
-	static Uint32 m_MouseButtons;
 
 private:
 

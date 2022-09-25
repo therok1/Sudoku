@@ -7,7 +7,7 @@
 #include <cmath>
 
 #include "Button.h"
-#include "Window.h"
+#include "Manager.h"
 
 struct Vector2D
 {

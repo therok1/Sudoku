@@ -1,8 +1,5 @@
 #include "Game.h"
 
-Uint32 Game::m_MouseButtons = Uint32();
-SDL_Point Game::m_MouseCoords = SDL_Point();
-
 Game::Game()
 {
 	m_Running = true;
@@ -61,7 +58,7 @@ void Game::EventLoop()
 
 	while (m_Running && SDL_PollEvent(&Event))
 	{
-		m_MouseButtons = SDL_GetMouseState(&m_MouseCoords.x, &m_MouseCoords.y);
+		Manager::MouseButtons = SDL_GetMouseState(&Manager::MouseCoords.x, &Manager::MouseCoords.y);
 
 		switch (Event.type)
 		{
@@ -88,7 +85,7 @@ void Game::EventLoop()
 
 void Game::Render()
 {
-	SDL_RenderClear(Window::m_Renderer);
+	SDL_RenderClear(Manager::Renderer);
 
 	Grid->Render();
 	Text->Render();
@@ -98,7 +95,7 @@ void Game::Render()
 		Button.second->Render();
 	}
 
-	SDL_RenderPresent(Window::m_Renderer);
+	SDL_RenderPresent(Manager::Renderer);
 }
 
 bool Game::GetRunning() const
