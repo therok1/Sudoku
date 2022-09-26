@@ -3,7 +3,6 @@
 Game::Game()
 {
 	m_Running = true;
-
 	m_State = InMenu;
 
 	Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
