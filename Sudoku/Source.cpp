@@ -41,22 +41,5 @@ int main(int argc, char** args)
 
 bool init()
 {
-	bool Fail = false;
-
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		Fail = true;
-	}
-
-	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
-	{
-		Fail = true;
-	}
-
-	if (TTF_Init() != 0)
-	{
-		Fail = true;
-	}
-
-	return !Fail;
+	return !(SDL_Init(SDL_INIT_EVERYTHING) != 0 || IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG || TTF_Init() != 0);
 }
