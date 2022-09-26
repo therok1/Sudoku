@@ -25,6 +25,8 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 				m_Buttons[Index]->SetColour(SecondaryColour);
 			}
 
+			m_Buttons[Index]->SetText(std::to_string(Index));
+
 			Index++;
 		}
 	}

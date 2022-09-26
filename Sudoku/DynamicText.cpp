@@ -1,5 +1,24 @@
 #include "DynamicText.h"
 
+DynamicText::DynamicText()
+{
+	m_Message = " ";
+	m_FontSize = 32;
+	m_Colour = { 255, 0, 0, 255 };
+
+	dst.x = 0;
+	dst.y = 0;
+	dst.w = 200;
+	dst.h = 50;
+
+	m_Font = TTF_OpenFont("Assets/Fonts/CascadiaCode.ttf", m_FontSize);
+
+	if (m_Font == nullptr)
+	{
+		std::cout << "Couldn't load font: " << TTF_GetError() << std::endl;
+	}
+}
+
 DynamicText::DynamicText(int PositionX, int PositionY, const std::string& Message, int FontSize, const std::string& FontPath, SDL_Color Colour)
 {
 	m_Message = Message;
@@ -17,13 +36,19 @@ DynamicText::DynamicText(int PositionX, int PositionY, const std::string& Messag
 	{
 		std::cout << "Couldn't load font: " << TTF_GetError() << std::endl;
 	}
-	
 }
 
 DynamicText::~DynamicText()
 {
-	SDL_DestroyTexture(m_Texture);
-	TTF_CloseFont(m_Font);
+	if (m_Texture != nullptr)
+	{
+		SDL_DestroyTexture(m_Texture);
+	}
+
+	if (m_Font != nullptr)
+	{
+		TTF_CloseFont(m_Font);
+	}
 }
 
 void DynamicText::Render()
@@ -51,4 +76,24 @@ void DynamicText::Render()
 	{
 		SDL_DestroyTexture(m_Texture);
 	}
+}
+
+void DynamicText::SetText(const std::string& Text)
+{
+	m_Message = Text;
+}
+
+void DynamicText::SetX(int PositionX)
+{
+	dst.x = PositionX;
+}
+
+void DynamicText::SetY(int PositionY)
+{
+	dst.y = PositionY;
+}
+
+SDL_Rect DynamicText::GetRect() const
+{
+	return dst;
 }

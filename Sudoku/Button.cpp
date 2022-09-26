@@ -17,6 +17,10 @@ Button::Button(int Width, int Height)
 	dst.h = Height;
 	dst.x = 0;
 	dst.y = 0;
+
+	m_Text = std::make_unique<DynamicText>();
+	
+	Refresh();
 }
 
 Button::Button(int Width, int Height, int PositionX, int PositionY, float AnchorX, float AnchorY, float PercentX, float PercentY, const std::string& Image)
@@ -49,6 +53,10 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 		dst.x = static_cast<int>(Manager::Width * PercentX) - static_cast<int>(dst.w * AnchorX);
 		dst.y = static_cast<int>(Manager::Height * PercentY) - static_cast<int>(dst.h * AnchorY);
 	}
+
+	m_Text = std::make_unique<DynamicText>();
+
+	Refresh();
 }
 
 Button::~Button()
@@ -96,13 +104,24 @@ void Button::Render()
 		}
 		
 		SDL_RenderFillRect(Manager::Renderer, &dst);
+		
+		m_Text->Render();
+
 		SDL_SetRenderDrawColor(Manager::Renderer, 0, 0, 0, 255);
 	}
 }
 
-bool Button::MouseRelease(GameState State, GameState DesiredState)
+void Button::Refresh()
 {
-	return (State == DesiredState) ? SDL_PointInRect(&Manager::MouseCoords, &dst) : false;
+	Render();
+
+	m_Text->SetX(dst.x + static_cast<int>(dst.w * 0.5) - static_cast<int>(m_Text->GetRect().w * 0.5));
+	m_Text->SetY(dst.y + static_cast<int>(dst.h * 0.5) - static_cast<int>(m_Text->GetRect().h * 0.5));
+}
+
+bool Button::MouseRelease(enum GameState State, enum GameState DesiredState)
+{
+	return ((State == DesiredState) && m_Focusable) ? SDL_PointInRect(&Manager::MouseCoords, &dst) : false;
 }
 
 void Button::SetColour(SDL_Color Colour)
@@ -128,11 +147,22 @@ void Button::SetFocusable(bool Focusable)
 void Button::SetX(int PositionX)
 {
 	dst.x = PositionX;
+	
+	m_Text->SetX(dst.x + static_cast<int>(dst.w * 0.5) - static_cast<int>(m_Text->GetRect().w * 0.5));
 }
 
 void Button::SetY(int PositionY)
 {
 	dst.y = PositionY;
+
+	m_Text->SetY(dst.y + static_cast<int>(dst.h * 0.5) - static_cast<int>(m_Text->GetRect().h * 0.5));
+}
+
+void Button::SetText(const std::string& Text)
+{
+	m_Text->SetText(Text);
+
+	Refresh();
 }
 
 bool Button::GetFocusable() const

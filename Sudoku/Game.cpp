@@ -8,22 +8,25 @@ Game::Game()
 
 	Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
 	Start->SetColour({ 255, 255, 255, 255 });
+	Start->SetText("Start");
 
 	Settings = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f);
 	Settings->SetColour({ 255, 255, 255, 255 });
+	Settings->SetText("Settings");
 
 	Quit = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
 	Quit->SetColour({ 255, 255, 255, 255 });
+	Quit->SetText("Quit");
 
 	m_Buttons.emplace("Start", std::move(Start));
 	m_Buttons.emplace("Settings", std::move(Settings));
 	m_Buttons.emplace("Quit", std::move(Quit));
 
-	Sudoku Sudoku;
+	/*Sudoku Sudoku;
 	Sudoku.CreateSeed();
 	Sudoku.GeneratePuzzle();
 	Sudoku.CalculateDifficulty();
-	Sudoku.PrintGrid();
+	Sudoku.PrintGrid();*/
 
 	Text = std::make_unique<DynamicText>(0, 0, "8", 32, "Assets/Fonts/CascadiaCode.ttf");
 
@@ -69,12 +72,14 @@ void Game::EventLoop()
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
 			{
-				if (m_Buttons["Quit"]->GetFocusable())
+				if (m_Buttons["Start"]->MouseRelease(m_State, InMenu))
 				{
-					if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
-					{
-						m_Running = false;
-					}
+					m_State = InGame;
+				}
+
+				if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
+				{
+					m_Running = false;
 				}
 			}
 		default:
@@ -87,13 +92,19 @@ void Game::Render()
 {
 	SDL_RenderClear(Manager::Renderer);
 
-	Grid->Render();
-	Text->Render();
-
-	for (const auto& Button : m_Buttons)
+	if (m_State == InMenu)
 	{
-		Button.second->Render();
+		for (const auto& Button : m_Buttons)
+		{
+			Button.second->Render();
+		}
 	}
+	else if (m_State == InGame)
+	{
+		Grid->Render();
+	}
+
+	Text->Render();
 
 	SDL_RenderPresent(Manager::Renderer);
 }

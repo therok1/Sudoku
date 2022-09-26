@@ -3,11 +3,15 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <memory>
+
+#include "DynamicText.h"
 
 class Button
 {
 public:
 
+	Button() = default;
 	Button(int Width, int Height);
 	Button(int Width, int Height, int PositionX, int PositionY, float AnchorX = 0.f, float AnchorY = 0.f, float PercentX = 0.f, float PercentY = 0.f, const std::string& Image = "");
 	~Button();
@@ -16,6 +20,7 @@ public:
 
 	void Update();
 	void Render();
+	void Refresh();
 	bool MouseRelease(enum GameState State, enum GameState DesiredState);
 	
 	// Setter Functions
@@ -24,6 +29,7 @@ public:
 	void SetFocusable(bool Focusable);
 	void SetX(int PositionX);
 	void SetY(int PositionY);
+	void SetText(const std::string& Text);
 
 	// Getter Functions
 
@@ -34,6 +40,7 @@ private:
 
 	SDL_Texture* m_Texture;
 	SDL_Rect dst;
+	std::unique_ptr<DynamicText> m_Text;
 
 	// Properties
 
