@@ -85,6 +85,7 @@ private:
 	// Animations
 
 	std::unique_ptr<Animation> BackgroundAnim;
+	std::unique_ptr<Animation> ButtonsAnim;
 
 };
 

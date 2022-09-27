@@ -14,7 +14,7 @@ int main(int argc, char** args)
 {
 	srand(time(nullptr));
 
-	if (!Manager::InitialiseWindow(1280, 720, "Sudoku") || !init())
+	if (!Manager::InitialiseWindow(720, 720, "Sudoku") || !init())
 	{
 		return 1;
 	}
