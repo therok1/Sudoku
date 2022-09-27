@@ -157,12 +157,17 @@ void Game::Tick()
 		}
 	}
 
-	for (const auto& Button : m_Buttons)
+	if (m_State == InMenu)
 	{
-		Button.second->Update();
+		for (const auto& Button : m_Buttons)
+		{
+			Button.second->Update();
+		}
 	}
-
-	m_Grid->Update();
+	else if (m_State == InGame)
+	{
+		m_Grid->Update();
+	}
 }
 
 void Game::EventLoop()

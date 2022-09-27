@@ -14,13 +14,13 @@ int main(int argc, char** args)
 {
 	srand(time(nullptr));
 
-	if (!Manager::InitialiseWindow(720, 720, "Sudoku") || !init())
+	if (!Manager::InitialiseWindow(1280, 720, "Sudoku") || !init())
 	{
 		return 1;
 	}
 
 	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
-
+	
 	while (GameObj->GetRunning())
 	{
 		GameObj->Tick();
