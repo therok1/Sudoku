@@ -3,6 +3,8 @@
 Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 {
 	m_Size = sqrt(Size);
+	m_PrimaryColour = PrimaryColour;
+	m_SecondaryColour = SecondaryColour;
 
 	m_AnchorPoint.X = m_AnchorPoint.Y = 0;
 	m_Position.X = m_Position.Y = 0;
@@ -19,10 +21,12 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 			if (i % 2 == j % 2)
 			{
 				m_Buttons[Index]->SetColour(PrimaryColour);
+				m_Buttons[Index]->SetTextColour({ 0, 150, 201, 255 });
 			}
 			else
 			{
 				m_Buttons[Index]->SetColour(SecondaryColour);
+				m_Buttons[Index]->SetTextColour({ 0, 108, 145, 255 });
 			}
 
 			m_Buttons[Index]->SetText(std::to_string(Index));

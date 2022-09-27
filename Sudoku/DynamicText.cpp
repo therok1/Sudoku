@@ -4,7 +4,8 @@ DynamicText::DynamicText()
 {
 	m_Message = " ";
 	m_FontSize = 16;
-	m_Colour = { 90, 90, 90, 255 };
+	m_FontPath = "Assets/Fonts/UniSans.ttf";
+	m_Colour = { 0, 0, 0, 255 };
 
 	dst.x = 0;
 	dst.y = 0;
@@ -23,6 +24,7 @@ DynamicText::DynamicText(int PositionX, int PositionY, const std::string& Messag
 {
 	m_Message = Message;
 	m_FontSize = FontSize;
+	m_FontPath = FontPath;
 	m_Colour = Colour;
 
 	dst.x = PositionX;
@@ -83,6 +85,18 @@ void DynamicText::SetText(const std::string& Text)
 	m_Message = Text;
 }
 
+void DynamicText::SetFontSize(int FontSize)
+{
+	m_FontSize = FontSize;
+
+	if (m_Font != nullptr)
+	{
+		TTF_CloseFont(m_Font);
+	}
+
+	m_Font = TTF_OpenFont(m_FontPath.c_str(), m_FontSize);
+}
+
 void DynamicText::SetX(int PositionX)
 {
 	dst.x = PositionX;
@@ -91,6 +105,11 @@ void DynamicText::SetX(int PositionX)
 void DynamicText::SetY(int PositionY)
 {
 	dst.y = PositionY;
+}
+
+void DynamicText::SetColour(SDL_Color Colour)
+{
+	m_Colour = Colour;
 }
 
 SDL_Rect DynamicText::GetRect() const

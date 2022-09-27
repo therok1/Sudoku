@@ -43,6 +43,8 @@ private:
 	Vector2D m_AnchorPoint;
 	Vector2D m_Position;
 	Vector2D m_SqSize;
+	SDL_Color m_PrimaryColour;
+	SDL_Color m_SecondaryColour;
 
 };
 

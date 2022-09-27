@@ -68,15 +68,13 @@ private:
 
 	// Menu Buttons
 
+	std::unique_ptr<Button> m_Title;
+	std::unique_ptr<Button> m_Credits;
 	std::unique_ptr<Button> m_Start;
 	std::unique_ptr<Button> m_Settings;
 	std::unique_ptr<Button> m_Quit;
 
 	std::map<std::string, std::unique_ptr<Button>> m_Buttons;
-
-	// Text Labels
-
-	std::unique_ptr<DynamicText> m_Text;
 
 	// Sudoku Grid
 
@@ -86,6 +84,7 @@ private:
 
 	std::unique_ptr<Animation> BackgroundAnim;
 	std::unique_ptr<Animation> ButtonsAnim;
+	std::unique_ptr<Animation> TextAnim;
 
 };
 

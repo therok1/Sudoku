@@ -13,26 +13,50 @@ Game::Game()
 {
 	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
 	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
+
 	SDL_Color BackgroundLight = { 255, 255, 255, 255 };
 	SDL_Color BackgroundDark = { 54, 57, 63, 255 };
 	SDL_Color ButtonsLight = { 230, 230, 230, 255 };
 	SDL_Color ButtonsDark = { 47, 49, 54, 255 };
 
+	SDL_Color TextLight = { 0, 0, 0, 255 };
+	SDL_Color TextDark = { 255, 255, 255, 255 };
+
 	m_Running = true;
 	m_State = InMenu;
+
+	m_Title = std::make_unique<Button>(400, 100, 0, 100, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Title->SetColour({ 0, 0, 0, 0 });
+	m_Title->SetText("Sudoku");
+	m_Title->SetFontSize(100);
+	m_Title->SetFocusable(false);
+
+	m_Credits = std::make_unique<Button>(400, 100, 0, 150, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Credits->SetColour({ 0, 0, 0, 0 });
+	m_Credits->SetText("By @therok1");
+	m_Credits->SetFontSize(30);
+	m_Credits->SetFocusable(false);
 
 	m_Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
 	m_Start->SetColour(ButtonsLight);
 	m_Start->SetText("Start");
+	m_Start->SetFontSize(20);
+	m_Start->SetTextColour({ 0, 0, 0, 255 });
 
 	m_Settings = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f);
 	m_Settings->SetColour(ButtonsLight);
 	m_Settings->SetText("Settings");
+	m_Settings->SetFontSize(20);
+	m_Settings->SetTextColour({ 0, 0, 0, 255 });
 
 	m_Quit = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
 	m_Quit->SetColour(ButtonsLight);
 	m_Quit->SetText("Quit");
+	m_Quit->SetFontSize(20);
+	m_Quit->SetTextColour({ 0, 0, 0, 255 });
 
+	m_Buttons.emplace("Title", std::move(m_Title));
+	m_Buttons.emplace("Credits", std::move(m_Credits));
 	m_Buttons.emplace("Start", std::move(m_Start));
 	m_Buttons.emplace("Settings", std::move(m_Settings));
 	m_Buttons.emplace("Quit", std::move(m_Quit));
@@ -43,8 +67,6 @@ Game::Game()
 	Sudoku.CalculateDifficulty();
 	Sudoku.PrintGrid();*/
 
-	m_Text = std::make_unique<DynamicText>(0, 0, "8", 16, "Assets/Fonts/UniSans.ttf");
-
 	m_Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
 	m_Grid->GenerateBoard();
 	m_Grid->SetX(0, true, 0.5);
@@ -53,6 +75,7 @@ Game::Game()
 
 	BackgroundAnim = std::make_unique<Animation>(1000, BackgroundLight, BackgroundDark);
 	ButtonsAnim = std::make_unique<Animation>(1000, ButtonsLight, ButtonsDark);
+	TextAnim = std::make_unique<Animation>(1000, TextLight, TextDark);
 }
 
 Game::~Game()
@@ -109,6 +132,30 @@ void Game::Tick()
 		}
 	}
 
+
+	TextAnim->CurrentTime = SDL_GetTicks();
+
+	if (TextAnim->Active)
+	{
+		if (TextAnim->CurrentTime > TextAnim->StartTime + TextAnim->Duration)
+		{
+			TextAnim->Active = false;
+		}
+		else
+		{
+			float Factor = (static_cast<float>(TextAnim->CurrentTime - TextAnim->StartTime) / TextAnim->Duration);
+
+			if (!Settings.DarkMode)
+			{
+				Lerp(&TextAnim->Result, TextAnim->Start, TextAnim->End, Factor);
+			}
+			else
+			{
+				Lerp(&TextAnim->Result, TextAnim->End, TextAnim->Start, Factor);
+			}
+		}
+	}
+
 	for (const auto& Button : m_Buttons)
 	{
 		Button.second->Update();
@@ -147,6 +194,9 @@ void Game::EventLoop()
 					ButtonsAnim->Active = true;
 					ButtonsAnim->StartTime = ButtonsAnim->CurrentTime;
 
+					TextAnim->Active = true;
+					TextAnim->StartTime = TextAnim->CurrentTime;
+
 				}
 
 				if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
@@ -166,6 +216,12 @@ void Game::Render()
 	m_Buttons["Settings"]->SetColour(ButtonsAnim->Result);
 	m_Buttons["Quit"]->SetColour(ButtonsAnim->Result);
 
+	m_Buttons["Title"]->SetTextColour(TextAnim->Result);
+	m_Buttons["Credits"]->SetTextColour(TextAnim->Result);
+	m_Buttons["Start"]->SetTextColour(TextAnim->Result);
+	m_Buttons["Settings"]->SetTextColour(TextAnim->Result);
+	m_Buttons["Quit"]->SetTextColour(TextAnim->Result);
+
 	SDL_SetRenderDrawColor(Window.Renderer, BackgroundAnim->Result.r, BackgroundAnim->Result.g, BackgroundAnim->Result.b, 255);
 
 	SDL_RenderClear(Window.Renderer);
@@ -181,8 +237,6 @@ void Game::Render()
 	{
 		m_Grid->Render();
 	}
-
-	m_Text->Render();
 
 	SDL_RenderPresent(Window.Renderer);
 }

@@ -25,11 +25,13 @@ public:
 	
 	// Setter Functions
 
-	void SetColour(SDL_Color Colour);
+	void SetText(const std::string& Text);
+	void SetFontSize(int FontSize);
 	void SetFocusable(bool Focusable);
 	void SetX(int PositionX);
 	void SetY(int PositionY);
-	void SetText(const std::string& Text);
+	void SetColour(SDL_Color Colour);
+	void SetTextColour(SDL_Color Colour);
 
 	// Getter Functions
 

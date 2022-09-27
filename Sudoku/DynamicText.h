@@ -13,7 +13,7 @@ class DynamicText
 public:
 
 	DynamicText();
-	DynamicText(int PositionX, int PositionY, const std::string& Message, int FontSize, const std::string& FontPath, SDL_Color Colour = { 255, 0, 0, 255 });
+	DynamicText(int PositionX, int PositionY, const std::string& Message, int FontSize, const std::string& FontPath, SDL_Color Colour = { 0, 0, 0, 255 });
 	~DynamicText();
 
 	// Main Functions
@@ -23,8 +23,10 @@ public:
 	// Setter Functions
 
 	void SetText(const std::string& Text);
+	void SetFontSize(int FontSize);
 	void SetX(int PositionX);
 	void SetY(int PositionY);
+	void SetColour(SDL_Color Colour);
 
 	// Getter Functions
 
@@ -41,6 +43,7 @@ private:
 
 	std::string m_Message;
 	int m_FontSize;
+	std::string m_FontPath;
 	SDL_Color m_Colour;
 
 };

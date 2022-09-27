@@ -19,7 +19,7 @@ Button::Button(int Width, int Height)
 	dst.y = 0;
 
 	m_Text = std::make_unique<DynamicText>();
-	
+
 	Refresh();
 }
 
@@ -39,17 +39,26 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 		m_Texture = Texture;
 	}
 
-	if (PercentX == 0.f && PercentY == 0.f)
+	dst.w = Width;
+	dst.h = Height;
+
+	if (PercentX == 0.0f && PercentY == 0.0f)
 	{
-		dst.w = Width;
-		dst.h = Height;
 		dst.x = PositionX - static_cast<int>(dst.w * AnchorX);
 		dst.y = PositionY - static_cast<int>(dst.h * AnchorY);
 	}
+	else if (PercentY == 0.0f && PercentX != 0.0f)
+	{
+		dst.x = static_cast<int>(Window.Width * PercentX) - static_cast<int>(dst.w * AnchorX);
+		dst.y = PositionY - static_cast<int>(dst.h * AnchorY);
+	}
+	else if (PercentX == 0.0f && PercentY != 0.0f)
+	{
+		dst.x = PositionX - static_cast<int>(dst.w * AnchorX);
+		dst.y = static_cast<int>(Window.Height * PercentY) - static_cast<int>(dst.h * AnchorY);
+	}
 	else
 	{
-		dst.w = Width;
-		dst.h = Height;
 		dst.x = static_cast<int>(Window.Width * PercentX) - static_cast<int>(dst.w * AnchorX);
 		dst.y = static_cast<int>(Window.Height * PercentY) - static_cast<int>(dst.h * AnchorY);
 	}
@@ -91,7 +100,7 @@ void Button::Render()
 	else
 	{
 		SDL_SetRenderDrawColor(Window.Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a);
-		
+
 		if (m_Selected)
 		{
 			SDL_SetRenderDrawColor(Window.Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
@@ -102,9 +111,12 @@ void Button::Render()
 				SDL_SetRenderDrawColor(Window.Renderer, m_ClickColour.r, m_ClickColour.g, m_ClickColour.b, m_ClickColour.a);
 			}
 		}
-		
-		SDL_RenderFillRect(Window.Renderer, &dst);
-		
+
+		if (m_Colour.a != 0)
+		{
+			SDL_RenderFillRect(Window.Renderer, &dst);
+		}
+
 		m_Text->Render();
 	}
 }
@@ -122,6 +134,39 @@ bool Button::MouseRelease(enum GameState State, enum GameState DesiredState)
 	return ((State == DesiredState) && m_Focusable) ? SDL_PointInRect(&Mouse.MouseCoords, &dst) : false;
 }
 
+void Button::SetText(const std::string& Text)
+{
+	m_Text->SetText(Text);
+
+	Refresh();
+}
+
+void Button::SetFontSize(int FontSize)
+{
+	m_Text->SetFontSize(FontSize);
+
+	Refresh();
+}
+
+void Button::SetFocusable(bool Focusable)
+{
+	m_Focusable = Focusable;
+}
+
+void Button::SetX(int PositionX)
+{
+	dst.x = PositionX;
+
+	m_Text->SetX(dst.x + static_cast<int>(dst.w * 0.5) - static_cast<int>(m_Text->GetRect().w * 0.5));
+}
+
+void Button::SetY(int PositionY)
+{
+	dst.y = PositionY;
+
+	m_Text->SetY(dst.y + static_cast<int>(dst.h * 0.5) - static_cast<int>(m_Text->GetRect().h * 0.5));
+}
+
 void Button::SetColour(SDL_Color Colour)
 {
 	m_Colour = Colour;
@@ -137,30 +182,9 @@ void Button::SetColour(SDL_Color Colour)
 	m_ClickColour.b *= 0.9f;
 }
 
-void Button::SetFocusable(bool Focusable)
+void Button::SetTextColour(SDL_Color Colour)
 {
-	m_Focusable = Focusable;
-}
-
-void Button::SetX(int PositionX)
-{
-	dst.x = PositionX;
-	
-	m_Text->SetX(dst.x + static_cast<int>(dst.w * 0.5) - static_cast<int>(m_Text->GetRect().w * 0.5));
-}
-
-void Button::SetY(int PositionY)
-{
-	dst.y = PositionY;
-
-	m_Text->SetY(dst.y + static_cast<int>(dst.h * 0.5) - static_cast<int>(m_Text->GetRect().h * 0.5));
-}
-
-void Button::SetText(const std::string& Text)
-{
-	m_Text->SetText(Text);
-
-	Refresh();
+	m_Text->SetColour(Colour);
 }
 
 bool Button::GetFocusable() const
