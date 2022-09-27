@@ -27,6 +27,7 @@ public:
 
 	void SetText(const std::string& Text);
 	void SetFontSize(int FontSize);
+	void SetFont(const std::string& FontPath);
 	void SetFocusable(bool Focusable);
 	void SetX(int PositionX);
 	void SetY(int PositionY);

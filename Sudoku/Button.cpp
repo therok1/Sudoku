@@ -148,6 +148,13 @@ void Button::SetFontSize(int FontSize)
 	Refresh();
 }
 
+void Button::SetFont(const std::string& FontPath)
+{
+	m_Text->SetFont(FontPath);
+
+	Refresh();
+}
+
 void Button::SetFocusable(bool Focusable)
 {
 	m_Focusable = Focusable;

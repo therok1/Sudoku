@@ -24,6 +24,7 @@ public:
 
 	void SetText(const std::string& Text);
 	void SetFontSize(int FontSize);
+	void SetFont(const std::string& FontPath);
 	void SetX(int PositionX);
 	void SetY(int PositionY);
 	void SetColour(SDL_Color Colour);

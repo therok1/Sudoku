@@ -25,16 +25,17 @@ Game::Game()
 	m_Running = true;
 	m_State = InMenu;
 
-	m_Title = std::make_unique<Button>(400, 100, 0, 100, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Title = std::make_unique<Button>(400, 100, 0, 150, 0.5f, 0.0f, 0.5f, 0.0f);
 	m_Title->SetColour({ 0, 0, 0, 0 });
 	m_Title->SetText("Sudoku");
 	m_Title->SetFontSize(100);
 	m_Title->SetFocusable(false);
 
-	m_Credits = std::make_unique<Button>(400, 100, 0, 150, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Credits = std::make_unique<Button>(400, 100, 0, 200, 0.5f, 0.0f, 0.5f, 0.0f);
 	m_Credits->SetColour({ 0, 0, 0, 0 });
 	m_Credits->SetText("By @therok1");
 	m_Credits->SetFontSize(30);
+	m_Credits->SetFont("Assets/Fonts/UniSansThin.ttf");
 	m_Credits->SetFocusable(false);
 
 	m_Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);

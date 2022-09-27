@@ -97,6 +97,18 @@ void DynamicText::SetFontSize(int FontSize)
 	m_Font = TTF_OpenFont(m_FontPath.c_str(), m_FontSize);
 }
 
+void DynamicText::SetFont(const std::string& FontPath)
+{
+	m_FontPath = FontPath;
+
+	if (m_Font != nullptr)
+	{
+		TTF_CloseFont(m_Font);
+	}
+
+	m_Font = TTF_OpenFont(m_FontPath.c_str(), m_FontSize);
+}
+
 void DynamicText::SetX(int PositionX)
 {
 	dst.x = PositionX;
