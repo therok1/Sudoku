@@ -11,20 +11,28 @@ namespace Manager
 	bool InitialiseWindow(int Width, int Height, const std::string& Title);
 	void DestroyWindow();
 
-	// Window and Renderer Pointers
+	struct MWindow
+	{
+		SDL_Window* Window = nullptr;
+		SDL_Renderer* Renderer = nullptr;
 
-	extern SDL_Window* Window;
-	extern SDL_Renderer* Renderer;
+		std::string Title = "SDL Desktop App";
+		int Width = 1280;
+		int Height = 720;
+	};
 
-	// Window Properties
+	struct MMouse
+	{
+		SDL_Point MouseCoords = SDL_Point();
+		Uint32 MouseButtons = Uint32();
+	};
 
-	extern std::string Title;
-	extern int Width;
-	extern int Height;
-
-	// Mouse Properties
-
-	extern SDL_Point MouseCoords;
-	extern Uint32 MouseButtons;
+	struct MSettings
+	{
+		bool DarkMode = false;
+	};
 }
 
+extern Manager::MWindow Window;
+extern Manager::MMouse Mouse;
+extern Manager::MSettings Settings;

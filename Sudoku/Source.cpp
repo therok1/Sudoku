@@ -21,8 +21,6 @@ int main(int argc, char** args)
 
 	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
 
-	SDL_SetRenderDrawColor(Manager::Renderer, 0, 0, 0, 255);
-
 	while (GameObj->GetRunning())
 	{
 		GameObj->Tick();

@@ -35,7 +35,7 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 
 	if (!Image.empty())
 	{
-		static SDL_Texture* Texture = IMG_LoadTexture(Manager::Renderer, Image.c_str());
+		static SDL_Texture* Texture = IMG_LoadTexture(Window.Renderer, Image.c_str());
 		m_Texture = Texture;
 	}
 
@@ -50,8 +50,8 @@ Button::Button(int Width, int Height, int PositionX, int PositionY, float Anchor
 	{
 		dst.w = Width;
 		dst.h = Height;
-		dst.x = static_cast<int>(Manager::Width * PercentX) - static_cast<int>(dst.w * AnchorX);
-		dst.y = static_cast<int>(Manager::Height * PercentY) - static_cast<int>(dst.h * AnchorY);
+		dst.x = static_cast<int>(Window.Width * PercentX) - static_cast<int>(dst.w * AnchorX);
+		dst.y = static_cast<int>(Window.Height * PercentY) - static_cast<int>(dst.h * AnchorY);
 	}
 
 	m_Text = std::make_unique<DynamicText>();
@@ -71,7 +71,7 @@ void Button::Update()
 {
 	if (m_Focusable)
 	{
-		if (SDL_PointInRect(&Manager::MouseCoords, &dst))
+		if (SDL_PointInRect(&Mouse.MouseCoords, &dst))
 		{
 			m_Selected = true;
 		}
@@ -86,28 +86,26 @@ void Button::Render()
 {
 	if (m_Texture != nullptr)
 	{
-		SDL_RenderCopy(Manager::Renderer, m_Texture, nullptr, &dst);
+		SDL_RenderCopy(Window.Renderer, m_Texture, nullptr, &dst);
 	}
 	else
 	{
-		SDL_SetRenderDrawColor(Manager::Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a);
+		SDL_SetRenderDrawColor(Window.Renderer, m_Colour.r, m_Colour.g, m_Colour.b, m_Colour.a);
 		
 		if (m_Selected)
 		{
-			SDL_SetRenderDrawColor(Manager::Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
+			SDL_SetRenderDrawColor(Window.Renderer, m_HoverColour.r, m_HoverColour.g, m_HoverColour.b, m_HoverColour.a);
 
 			// If left mouse click is pressed
-			if ((Manager::MouseButtons & SDL_BUTTON_LMASK) != 0)
+			if ((Mouse.MouseButtons & SDL_BUTTON_LMASK) != 0)
 			{
-				SDL_SetRenderDrawColor(Manager::Renderer, m_ClickColour.r, m_ClickColour.g, m_ClickColour.b, m_ClickColour.a);
+				SDL_SetRenderDrawColor(Window.Renderer, m_ClickColour.r, m_ClickColour.g, m_ClickColour.b, m_ClickColour.a);
 			}
 		}
 		
-		SDL_RenderFillRect(Manager::Renderer, &dst);
+		SDL_RenderFillRect(Window.Renderer, &dst);
 		
 		m_Text->Render();
-
-		SDL_SetRenderDrawColor(Manager::Renderer, 0, 0, 0, 255);
 	}
 }
 
@@ -121,7 +119,7 @@ void Button::Refresh()
 
 bool Button::MouseRelease(enum GameState State, enum GameState DesiredState)
 {
-	return ((State == DesiredState) && m_Focusable) ? SDL_PointInRect(&Manager::MouseCoords, &dst) : false;
+	return ((State == DesiredState) && m_Focusable) ? SDL_PointInRect(&Mouse.MouseCoords, &dst) : false;
 }
 
 void Button::SetColour(SDL_Color Colour)
@@ -130,13 +128,13 @@ void Button::SetColour(SDL_Color Colour)
 	m_HoverColour = Colour;
 	m_ClickColour = Colour;
 
-	m_HoverColour.r = m_HoverColour.r * 0.9f;
-	m_HoverColour.g = m_HoverColour.g * 0.9f;
-	m_HoverColour.b = m_HoverColour.b * 0.9f;
+	m_HoverColour.r *= 0.95f;
+	m_HoverColour.g *= 0.95f;
+	m_HoverColour.b *= 0.95f;
 
-	m_ClickColour.r = m_ClickColour.r * 0.75f;
-	m_ClickColour.g = m_ClickColour.g * 0.75f;
-	m_ClickColour.b = m_ClickColour.b * 0.75f;
+	m_ClickColour.r *= 0.9f;
+	m_ClickColour.g *= 0.9f;
+	m_ClickColour.b *= 0.9f;
 }
 
 void Button::SetFocusable(bool Focusable)

@@ -1,25 +1,39 @@
 #include "Game.h"
 
+void Lerp(SDL_Color* Out, SDL_Color Start, SDL_Color End, float Factor)
+{
+	float Temp = 1.0f - Factor;
+
+	Out->r = static_cast<float>(Start.r) * Temp + static_cast<float>(End.r) * Factor;
+	Out->g = static_cast<float>(Start.g) * Temp + static_cast<float>(End.g) * Factor;
+	Out->b = static_cast<float>(Start.b) * Temp + static_cast<float>(End.b) * Factor;
+}
+
 Game::Game()
 {
+	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
+	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
+	SDL_Color StartColour = { 255, 255, 255, 255 };
+	SDL_Color EndColour = { 54, 57, 63, 255 };
+
 	m_Running = true;
 	m_State = InMenu;
 
-	Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
-	Start->SetColour({ 255, 255, 255, 255 });
-	Start->SetText("Start");
+	m_Start = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f);
+	m_Start->SetColour({ 230, 230, 230, 255 });
+	m_Start->SetText("Start");
 
-	Settings = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f);
-	Settings->SetColour({ 255, 255, 255, 255 });
-	Settings->SetText("Settings");
+	m_Settings = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f);
+	m_Settings->SetColour({ 230, 230, 230, 255 });
+	m_Settings->SetText("Settings");
 
-	Quit = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
-	Quit->SetColour({ 255, 255, 255, 255 });
-	Quit->SetText("Quit");
+	m_Quit = std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
+	m_Quit->SetColour({ 230, 230, 230, 255 });
+	m_Quit->SetText("Quit");
 
-	m_Buttons.emplace("Start", std::move(Start));
-	m_Buttons.emplace("Settings", std::move(Settings));
-	m_Buttons.emplace("Quit", std::move(Quit));
+	m_Buttons.emplace("Start", std::move(m_Start));
+	m_Buttons.emplace("Settings", std::move(m_Settings));
+	m_Buttons.emplace("Quit", std::move(m_Quit));
 
 	/*Sudoku Sudoku;
 	Sudoku.CreateSeed();
@@ -27,16 +41,15 @@ Game::Game()
 	Sudoku.CalculateDifficulty();
 	Sudoku.PrintGrid();*/
 
-	Text = std::make_unique<DynamicText>(0, 0, "8", 32, "Assets/Fonts/CascadiaCode.ttf");
+	m_Text = std::make_unique<DynamicText>(0, 0, "8", 16, "Assets/Fonts/UniSans.ttf");
 
-	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
-	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
+	m_Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
+	m_Grid->GenerateBoard();
+	m_Grid->SetX(0, true, 0.5);
+	m_Grid->SetY(0, true, 0.5);
+	m_Grid->SetAnchorPoint(0.5f, 0.5f);
 
-	Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
-	Grid->GenerateBoard();
-	Grid->SetX(0, true, 0.5);
-	Grid->SetY(0, true, 0.5);
-	Grid->SetAnchorPoint(0.5f, 0.5f);
+	BackgroundAnim = std::make_unique<Animation>(1000, StartColour, EndColour);
 }
 
 Game::~Game()
@@ -46,12 +59,36 @@ Game::~Game()
 
 void Game::Tick()
 {
+	BackgroundAnim->CurrentTime = SDL_GetTicks();
+
+	if (BackgroundAnim->Active)
+	{
+		if (BackgroundAnim->CurrentTime > BackgroundAnim->StartTime + BackgroundAnim->Duration)
+		{
+			BackgroundAnim->Active = false;
+			Settings.DarkMode = !Settings.DarkMode;
+		}
+		else
+		{
+			float Factor = (static_cast<float>(BackgroundAnim->CurrentTime - BackgroundAnim->StartTime) / BackgroundAnim->Duration);
+
+			if (!Settings.DarkMode)
+			{
+				Lerp(&BackgroundAnim->Result, BackgroundAnim->Start, BackgroundAnim->End, Factor);
+			}
+			else
+			{
+				Lerp(&BackgroundAnim->Result, BackgroundAnim->End, BackgroundAnim->Start, Factor);
+			}
+		}
+	}
+
 	for (const auto& Button : m_Buttons)
 	{
 		Button.second->Update();
 	}
 
-	Grid->Update();
+	m_Grid->Update();
 }
 
 void Game::EventLoop()
@@ -60,7 +97,7 @@ void Game::EventLoop()
 
 	while (m_Running && SDL_PollEvent(&Event))
 	{
-		Manager::MouseButtons = SDL_GetMouseState(&Manager::MouseCoords.x, &Manager::MouseCoords.y);
+		Mouse.MouseButtons = SDL_GetMouseState(&Mouse.MouseCoords.x, &Mouse.MouseCoords.y);
 
 		switch (Event.type)
 		{
@@ -76,6 +113,13 @@ void Game::EventLoop()
 					m_State = InGame;
 				}
 
+				if (m_Buttons["Settings"]->MouseRelease(m_State, InMenu))
+				{
+					BackgroundAnim->Active = true;
+					BackgroundAnim->StartTime = BackgroundAnim->CurrentTime;
+
+				}
+
 				if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
 				{
 					m_Running = false;
@@ -89,7 +133,10 @@ void Game::EventLoop()
 
 void Game::Render()
 {
-	SDL_RenderClear(Manager::Renderer);
+
+	SDL_SetRenderDrawColor(Window.Renderer, BackgroundAnim->Result.r, BackgroundAnim->Result.g, BackgroundAnim->Result.b, 255);
+
+	SDL_RenderClear(Window.Renderer);
 
 	if (m_State == InMenu)
 	{
@@ -100,12 +147,12 @@ void Game::Render()
 	}
 	else if (m_State == InGame)
 	{
-		Grid->Render();
+		m_Grid->Render();
 	}
 
-	Text->Render();
+	m_Text->Render();
 
-	SDL_RenderPresent(Manager::Renderer);
+	SDL_RenderPresent(Window.Renderer);
 }
 
 bool Game::GetRunning() const

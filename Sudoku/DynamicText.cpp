@@ -3,15 +3,15 @@
 DynamicText::DynamicText()
 {
 	m_Message = " ";
-	m_FontSize = 32;
-	m_Colour = { 255, 0, 0, 255 };
+	m_FontSize = 16;
+	m_Colour = { 90, 90, 90, 255 };
 
 	dst.x = 0;
 	dst.y = 0;
 	dst.w = 200;
 	dst.h = 50;
 
-	m_Font = TTF_OpenFont("Assets/Fonts/CascadiaCode.ttf", m_FontSize);
+	m_Font = TTF_OpenFont("Assets/Fonts/UniSans.ttf", m_FontSize);
 
 	if (m_Font == nullptr)
 	{
@@ -60,7 +60,7 @@ void DynamicText::Render()
 		std::cout << "Couldn't create surface: " << TTF_GetError() << std::endl;
 	}
 	
-	m_Texture = SDL_CreateTextureFromSurface(Manager::Renderer, m_Surface);
+	m_Texture = SDL_CreateTextureFromSurface(Window.Renderer, m_Surface);
 
 	if (m_Texture == nullptr)
 	{
@@ -70,7 +70,7 @@ void DynamicText::Render()
 	TTF_SizeText(m_Font, m_Message.c_str(), &dst.w, &dst.h);
 
 	SDL_FreeSurface(m_Surface);
-	SDL_RenderCopy(Manager::Renderer, m_Texture, nullptr, &dst);
+	SDL_RenderCopy(Window.Renderer, m_Texture, nullptr, &dst);
 
 	if (m_Texture != nullptr)
 	{
