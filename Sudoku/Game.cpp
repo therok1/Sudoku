@@ -74,6 +74,8 @@ Game::Game()
 	m_Grid->SetY(0, true, 0.5);
 	m_Grid->SetAnchorPoint(0.5f, 0.5f);
 
+	m_Sudoku = std::make_unique<Sudoku>();
+
 	BackgroundAnim = std::make_unique<Animation>(1000, BackgroundLight, BackgroundDark);
 	ButtonsAnim = std::make_unique<Animation>(1000, ButtonsLight, ButtonsDark);
 	TextAnim = std::make_unique<Animation>(1000, TextLight, TextDark);
@@ -189,6 +191,15 @@ void Game::EventLoop()
 			{
 				if (m_Buttons["Start"]->MouseRelease(m_State, InMenu))
 				{
+					m_Sudoku->CreateSeed();
+					m_Sudoku->GeneratePuzzle();
+					m_Sudoku->CalculateDifficulty();
+					m_Sudoku->PrintGrid();
+
+					std::array<std::array<int, 9>, 9> Puzzle = m_Sudoku->GetGrid();
+					
+					m_Grid->FillBoard(Puzzle);
+
 					m_State = InGame;
 				}
 

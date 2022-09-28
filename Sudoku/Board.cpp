@@ -59,6 +59,21 @@ void Board::GenerateBoard()
 	}
 }
 
+void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku)
+{
+	int Index = 0;
+
+	for (int j = 0; j < m_Size; j++)
+	{
+		for (int i = 0; i < m_Size; i++)
+		{
+			m_Buttons[Index]->SetText((Sudoku[j][i] == 0) ? " " : std::to_string(Sudoku[j][i]));
+
+			Index++;
+		}
+	}
+}
+
 void Board::Update()
 {
 	for (auto& Button : m_Buttons)

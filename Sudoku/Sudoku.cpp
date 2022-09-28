@@ -1,19 +1,5 @@
 #include "Sudoku.h"
 
-std::string Sudoku::GetGrid()
-{
-	std::string Temp = "";
-	for (int Row = 0; Row < 9; ++Row)
-	{
-		for (int Col = 0; Col < 9; ++Col)
-		{
-			Temp += std::to_string(m_Grid[Row][Col]);
-		}
-	}
-
-	return Temp;
-}
-
 int Random(int MaxRange)
 {
 	return rand() % MaxRange;
@@ -428,4 +414,9 @@ void Sudoku::CalculateDifficulty()
 	}
 
 	m_DifficultyLevel = B * 100 + EmptyCells;
+}
+
+const std::array<std::array<int, 9>, 9>& Sudoku::GetGrid() const
+{
+	return m_Grid;
 }

@@ -80,10 +80,15 @@ private:
 
 	std::unique_ptr<Board> m_Grid;
 
+	// Sudoku Puzzle
+
+	std::unique_ptr<Sudoku> m_Sudoku;
+
 	// Animations
 
 	std::unique_ptr<Animation> BackgroundAnim;
 	std::unique_ptr<Animation> ButtonsAnim;
 	std::unique_ptr<Animation> TextAnim;
+
 };
 

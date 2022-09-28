@@ -180,13 +180,13 @@ void Button::SetColour(SDL_Color Colour)
 	m_HoverColour = Colour;
 	m_ClickColour = Colour;
 
-	m_HoverColour.r *= 0.95f;
-	m_HoverColour.g *= 0.95f;
-	m_HoverColour.b *= 0.95f;
+	m_HoverColour.r *= 0.98f;
+	m_HoverColour.g *= 0.98f;
+	m_HoverColour.b *= 0.98f;
 
-	m_ClickColour.r *= 0.9f;
-	m_ClickColour.g *= 0.9f;
-	m_ClickColour.b *= 0.9f;
+	m_ClickColour.r *= 0.95f;
+	m_ClickColour.g *= 0.95f;
+	m_ClickColour.b *= 0.95f;
 }
 
 void Button::SetTextColour(SDL_Color Colour)

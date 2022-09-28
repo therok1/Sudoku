@@ -28,7 +28,7 @@ public:
 	bool SolveGrid();
 	bool VerifyGridStatus();
 
-	std::string GetGrid();
+	const std::array<std::array<int, 9>, 9>& GetGrid() const;
 
 private:
 

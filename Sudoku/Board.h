@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <cmath>
+#include <array>
 
 #include "Button.h"
 #include "Manager.h"
@@ -24,6 +25,7 @@ public:
 	// Main Functions
 
 	void GenerateBoard();
+	void FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku);
 	void Update();
 	void Render();
 
