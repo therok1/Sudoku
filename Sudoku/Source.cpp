@@ -26,7 +26,7 @@ int main(int argc, char** args)
 	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
 
 	const auto Time = 1s;
-	const auto TargetTime = Time / 60;
+	const auto TargetTime = 1s / 60;
 	auto CurrentTime = std::chrono::steady_clock::now();
 	auto Accumulator = 0ns;
 	
