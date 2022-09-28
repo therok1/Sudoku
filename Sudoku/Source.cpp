@@ -4,9 +4,13 @@
 #include <SDL_ttf.h>
 #include <time.h>
 #include <memory>
+#include <chrono>
+#include <sstream>
 
 #include "Game.h"
 #include "Manager.h"
+
+using namespace std::literals;
 
 bool init();
 
@@ -20,12 +24,36 @@ int main(int argc, char** args)
 	}
 
 	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
+
+	const auto Time = 1s;
+	const auto TargetTime = Time / 60;
+	auto CurrentTime = std::chrono::steady_clock::now();
+	auto Accumulator = 0ns;
 	
 	while (GameObj->GetRunning())
 	{
-		GameObj->Tick();
-		GameObj->EventLoop();
-		GameObj->Render();
+		auto NewTime = std::chrono::steady_clock::now();
+		auto FrameTime = NewTime - CurrentTime;
+		CurrentTime = NewTime;
+
+		Accumulator += FrameTime;
+
+		if (Accumulator >= TargetTime)
+		{
+			GameObj->Tick();
+			GameObj->EventLoop();
+			GameObj->Render();
+
+			Accumulator -= std::chrono::duration_cast<std::chrono::nanoseconds>(TargetTime);
+		}
+
+		if (FrameTime != 0ns)
+		{
+			std::ostringstream Stream;
+			Stream << (1s / FrameTime);
+
+			SDL_SetWindowTitle(Window.Window, (Window.Title + " FPS: " + Stream.str()).c_str());
+		}
 	}
 
 	delete GameObj;

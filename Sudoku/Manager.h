@@ -19,6 +19,8 @@ namespace Manager
 		std::string Title = "SDL Desktop App";
 		int Width = 1280;
 		int Height = 720;
+
+		float FPS = 0;
 	};
 
 	struct MMouse
