@@ -106,7 +106,7 @@ void Board::FillCell(enum GameState State, enum GameState DesiredState, int Sele
 
 					if (m_SudokuSolution[j][i] != Selected)
 					{
-						m_Buttons[Index]->SetTextColour({ 255, 0, 0, 255 });
+						m_Buttons[Index]->SetTextColour({ 255, 0, 0, 255 }); // Mark incorrect field with red
 					}
 					else
 					{
