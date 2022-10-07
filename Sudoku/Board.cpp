@@ -1,7 +1,10 @@
 #include "Board.h"
+#include "Game.h"
 
 Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 {
+	m_Sudoku = { 0 };
+
 	m_Size = sqrt(Size);
 	m_PrimaryColour = PrimaryColour;
 	m_SecondaryColour = SecondaryColour;
@@ -71,6 +74,7 @@ void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku)
 		for (int i = 0; i < m_Size; i++)
 		{
 			m_Buttons[Index]->SetText((Sudoku[j][i] == 0) ? " " : std::to_string(Sudoku[j][i]));
+			m_Sudoku[j][i] = Sudoku[j][i];
 
 			Index++;
 		}
@@ -90,6 +94,27 @@ void Board::Render()
 	for (auto& Button : m_Buttons)
 	{
 		Button->Render();
+	}
+}
+
+void Board::FillCell(enum GameState State, enum GameState DesiredState, int Selected)
+{
+	int Index = 0;
+
+	for (int j = 0; j < m_Size; j++)
+	{
+		for (int i = 0; i < m_Size; i++)
+		{
+			if (m_Buttons[Index]->MouseRelease(State, DesiredState))
+			{
+				if (m_Sudoku[j][i] == 0)
+				{
+					m_Buttons[Index]->SetText(std::to_string(Selected));
+				}
+			}
+
+			Index++;
+		}
 	}
 }
 

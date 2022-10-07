@@ -67,6 +67,7 @@ private:
 
 	// Properties
 
+	int m_Selected;
 	bool m_Running;
 	GameState m_State;
 

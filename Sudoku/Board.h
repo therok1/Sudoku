@@ -24,6 +24,7 @@ public:
 	void FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku);
 	void Update();
 	void Render();
+	void FillCell(enum GameState State, enum GameState DesiredState, int Selected);
 
 	// Setter Functions
 
@@ -34,6 +35,7 @@ public:
 private:
 
 	std::vector<std::unique_ptr<Button>> m_Buttons;
+	std::array<std::array<int, 9>, 9> m_Sudoku;
 	
 	// Properties
 

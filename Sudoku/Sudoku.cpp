@@ -103,6 +103,10 @@ void Sudoku::CreateSeed()
 Sudoku::Sudoku()
 {
 	m_DifficultyLevel = 0;
+	m_Grid = { 0 };
+	m_GridPosition = { 0 };
+	m_Numbers = { 0 };
+	m_SolutionGrid = { 0 };
 
 	for (int i = 0; i < 81; i++)
 	{
@@ -131,6 +135,12 @@ Sudoku::Sudoku()
 
 Sudoku::Sudoku(const std::string& GridString, bool RowMajor)
 {
+	m_DifficultyLevel = 0;
+	m_Grid = { 0 };
+	m_GridPosition = { 0 };
+	m_Numbers = { 0 };
+	m_SolutionGrid = { 0 };
+
 	if (GridString.length() != 81)
 	{
 		m_GridStatus = false;

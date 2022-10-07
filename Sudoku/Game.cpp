@@ -22,6 +22,7 @@ Game::Game()
 	SDL_Color TextLight = { 0, 0, 0, 255 };
 	SDL_Color TextDark = { 255, 255, 255, 255 };
 
+	m_Selected = 0;
 	m_Running = true;
 	m_State = InMenu;
 
@@ -143,6 +144,8 @@ void Game::EventLoop()
 				{
 					m_Running = false;
 				}
+
+				m_Grid->FillCell(m_State, InGame, m_Selected);
 			}
 		default:
 			break; 
