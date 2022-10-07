@@ -21,10 +21,11 @@ public:
 	// Main Functions
 
 	void GenerateBoard();
-	void FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku);
+	void GenerateSolution(const std::array<std::array<int, 9>, 9>& Sudoku);
+	void FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std::array<std::array<int, 9>, 9>& SudokuSolution);
+	void FillCell(enum GameState State, enum GameState DesiredState, int Selected);
 	void Update();
 	void Render();
-	void FillCell(enum GameState State, enum GameState DesiredState, int Selected);
 
 	// Setter Functions
 
@@ -36,6 +37,7 @@ private:
 
 	std::vector<std::unique_ptr<Button>> m_Buttons;
 	std::array<std::array<int, 9>, 9> m_Sudoku;
+	std::array<std::array<int, 9>, 9> m_SudokuSolution;
 	
 	// Properties
 

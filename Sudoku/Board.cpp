@@ -4,6 +4,7 @@
 Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 {
 	m_Sudoku = { 0 };
+	m_SudokuSolution = { 0 };
 
 	m_Size = sqrt(Size);
 	m_PrimaryColour = PrimaryColour;
@@ -65,7 +66,12 @@ void Board::GenerateBoard()
 	}
 }
 
-void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku)
+void Board::GenerateSolution(const std::array<std::array<int, 9>, 9>& Sudoku)
+{
+	m_SudokuSolution = Sudoku;
+}
+
+void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std::array<std::array<int, 9>, 9>& SudokuSolution)
 {
 	int Index = 0;
 
@@ -74,7 +80,47 @@ void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku)
 		for (int i = 0; i < m_Size; i++)
 		{
 			m_Buttons[Index]->SetText((Sudoku[j][i] == 0) ? " " : std::to_string(Sudoku[j][i]));
-			m_Sudoku[j][i] = Sudoku[j][i];
+
+			Index++;
+		}
+	}
+
+	m_Sudoku = Sudoku;
+	m_SudokuSolution = SudokuSolution;
+}
+
+void Board::FillCell(enum GameState State, enum GameState DesiredState, int Selected)
+{
+	int Index = 0;
+
+	for (int j = 0; j < m_Size; j++)
+	{
+		for (int i = 0; i < m_Size; i++)
+		{
+			if (m_Buttons[Index]->MouseRelease(State, DesiredState))
+			{
+				if (m_Sudoku[j][i] == 0 || m_Sudoku[j][i] != m_SudokuSolution[j][i])
+				{
+					m_Buttons[Index]->SetText(std::to_string(Selected));
+					m_Sudoku[j][i] = Selected;
+
+					if (m_SudokuSolution[j][i] != Selected)
+					{
+						m_Buttons[Index]->SetTextColour({ 255, 0, 0, 255 });
+					}
+					else
+					{
+						if (i % 2 == j % 2)
+						{
+							m_Buttons[Index]->SetTextColour({ 0, 150, 201, 255 });
+						}
+						else
+						{
+							m_Buttons[Index]->SetTextColour({ 0, 108, 145, 255 });
+						}
+					}
+				}
+			}
 
 			Index++;
 		}
@@ -94,27 +140,6 @@ void Board::Render()
 	for (auto& Button : m_Buttons)
 	{
 		Button->Render();
-	}
-}
-
-void Board::FillCell(enum GameState State, enum GameState DesiredState, int Selected)
-{
-	int Index = 0;
-
-	for (int j = 0; j < m_Size; j++)
-	{
-		for (int i = 0; i < m_Size; i++)
-		{
-			if (m_Buttons[Index]->MouseRelease(State, DesiredState))
-			{
-				if (m_Sudoku[j][i] == 0)
-				{
-					m_Buttons[Index]->SetText(std::to_string(Selected));
-				}
-			}
-
-			Index++;
-		}
 	}
 }
 

@@ -263,7 +263,7 @@ void Sudoku::PrintGrid()
 bool Sudoku::SolveGrid()
 {
 	int Row, Col;
-
+	
 	if (!FindUnassignedLocation(m_Grid, Row, Col))
 	{
 		return true;
@@ -429,4 +429,9 @@ void Sudoku::CalculateDifficulty()
 const std::array<std::array<int, 9>, 9>& Sudoku::GetGrid() const
 {
 	return m_Grid;
+}
+
+const std::array<std::array<int, 9>, 9>& Sudoku::GetSolutionGrid() const
+{
+	return m_SolutionGrid;
 }

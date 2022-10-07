@@ -22,7 +22,7 @@ Game::Game()
 	SDL_Color TextLight = { 0, 0, 0, 255 };
 	SDL_Color TextDark = { 255, 255, 255, 255 };
 
-	m_Selected = 0;
+	m_Selected = 1;
 	m_Running = true;
 	m_State = InMenu;
 
@@ -129,8 +129,9 @@ void Game::EventLoop()
 					m_Sudoku->PrintGrid();
 
 					std::array<std::array<int, 9>, 9> Puzzle = m_Sudoku->GetGrid();
+					std::array<std::array<int, 9>, 9> PuzzleSolution = m_Sudoku->GetSolutionGrid();
 					
-					m_Grid->FillBoard(Puzzle);
+					m_Grid->FillBoard(Puzzle, PuzzleSolution);
 
 					m_State = InGame;
 				}
