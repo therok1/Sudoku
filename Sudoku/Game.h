@@ -55,6 +55,9 @@ public:
 	void EventLoop();
 	void Render();
 
+	void ThemeUpdate();
+	void ThemeActivate();
+
 	// Getter Functions
 
 	bool GetRunning() const;

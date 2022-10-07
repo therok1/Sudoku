@@ -9,11 +9,7 @@
 
 #include "Button.h"
 #include "Manager.h"
-
-struct Vector2D
-{
-	float X, Y;
-};
+#include "Vector2D.h"
 
 class Board
 {

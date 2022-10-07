@@ -6,9 +6,12 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	m_PrimaryColour = PrimaryColour;
 	m_SecondaryColour = SecondaryColour;
 
-	m_AnchorPoint.X = m_AnchorPoint.Y = 0;
-	m_Position.X = m_Position.Y = 0;
-	m_SqSize.X = m_SqSize.Y = 50;
+	m_AnchorPoint.SetX(0);
+	m_AnchorPoint.SetY(0);
+	m_Position.SetX(0);
+	m_Position.SetY(0);
+	m_SqSize.SetX(50);
+	m_SqSize.SetY(50);
 
 	int Index = 0;
 
@@ -16,7 +19,7 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	{
 		for (int j = 0; j < m_Size; j++)
 		{
-			m_Buttons.push_back(std::make_unique<Button>(m_SqSize.X, m_SqSize.Y));
+			m_Buttons.push_back(std::make_unique<Button>(m_SqSize.GetX(), m_SqSize.GetY()));
 
 			if (i % 2 == j % 2)
 			{
@@ -100,13 +103,13 @@ void Board::SetX(int PositionX, bool A, float PercentX)
 		{
 			if (!A)
 			{
-				m_Buttons[Index]->SetX((m_Buttons[i]->GetRect().w * i) + (PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.X)));
-				m_Position.X = (PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.X));
+				m_Buttons[Index]->SetX((m_Buttons[i]->GetRect().w * i) + (PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.GetX())));
+				m_Position.SetX(PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.GetX()));
 			}
 			else
 			{
-				m_Buttons[Index]->SetX((m_Buttons[i]->GetRect().w * i) + static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.X));
-				m_Position.X = static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.X);
+				m_Buttons[Index]->SetX((m_Buttons[i]->GetRect().w * i) + static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.GetX()));
+				m_Position.SetX(static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_Size * m_AnchorPoint.GetX()));
 			}
 
 			Index++;
@@ -124,13 +127,13 @@ void Board::SetY(int PositionY, bool A, float PercentY)
 		{
 			if (!A)
 			{
-				m_Buttons[Index]->SetY((m_Buttons[i]->GetRect().h * j) + (PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.Y)));
-				m_Position.Y = (PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.Y));
+				m_Buttons[Index]->SetY((m_Buttons[i]->GetRect().h * j) + (PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.GetY())));
+				m_Position.SetY(PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.GetY()));
 			}
 			else
 			{
-				m_Buttons[Index]->SetY((m_Buttons[i]->GetRect().h * j) + static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.Y));
-				m_Position.Y = static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.Y);
+				m_Buttons[Index]->SetY((m_Buttons[i]->GetRect().h * j) + static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.GetY()));
+				m_Position.SetY(static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Size * m_AnchorPoint.GetY()));
 			}
 
 			Index++;
@@ -140,9 +143,9 @@ void Board::SetY(int PositionY, bool A, float PercentY)
 
 void Board::SetAnchorPoint(float AnchorX, float AnchorY)
 {
-	m_AnchorPoint.X = AnchorX;
-	m_AnchorPoint.Y = AnchorY;
-
-	SetX(m_Position.X);
-	SetY(m_Position.Y);
+	m_AnchorPoint.SetX(AnchorX);
+	m_AnchorPoint.SetY(AnchorY);
+	
+	SetX(m_Position.GetX());
+	SetY(m_Position.GetY());
 }

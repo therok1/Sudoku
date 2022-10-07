@@ -36,6 +36,12 @@
     <ClCompile Include="DynamicText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SidePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DynamicText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SidePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
