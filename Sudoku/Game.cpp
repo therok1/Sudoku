@@ -62,12 +62,6 @@ Game::Game()
 	m_Buttons.emplace("Settings", std::move(m_Settings));
 	m_Buttons.emplace("Quit", std::move(m_Quit));
 
-	/*Sudoku Sudoku;
-	Sudoku.CreateSeed();
-	Sudoku.GeneratePuzzle();
-	Sudoku.CalculateDifficulty();
-	Sudoku.PrintGrid();*/
-
 	m_Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
 	m_Grid->GenerateBoard();
 	m_Grid->SetX(0, true, 0.5f);
@@ -76,6 +70,8 @@ Game::Game()
 
 	m_SidePanel = std::make_unique<SidePanel>();
 	m_SidePanel->GeneratePanel();
+	m_SidePanel->SetX(0, true, 1.0f);
+	m_SidePanel->SetAnchorPoint(1.0f, 0.0f);
 
 	m_Sudoku = std::make_unique<Sudoku>();
 

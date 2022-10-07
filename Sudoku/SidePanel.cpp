@@ -50,3 +50,46 @@ void SidePanel::Render()
 		Button->Render();
 	}
 }
+
+void SidePanel::SetX(int PositionX, bool A, float PercentX)
+{
+	for (int i = 0; i < m_Buttons.size(); i++)
+	{
+		if (!A)
+		{
+			m_Buttons[i]->SetX(PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_AnchorPoint.GetX()));
+			m_Position.SetX(PositionX - static_cast<int>(m_Buttons[i]->GetRect().w * m_AnchorPoint.GetX()));
+		}
+		else
+		{
+			m_Buttons[i]->SetX((m_Buttons[i]->GetRect().w * i) + static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_AnchorPoint.GetX()));
+			m_Position.SetX(static_cast<int>(Window.Width * PercentX) - static_cast<int>(m_Buttons[i]->GetRect().w * m_AnchorPoint.GetX()));
+		}
+	}
+}
+
+void SidePanel::SetY(int PositionY, bool A, float PercentY)
+{
+	for (int i = 0; i < m_Buttons.size(); i++)
+	{
+		if (!A)
+		{
+			m_Buttons[i]->SetY((m_Buttons[i]->GetRect().h * i) + (PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Buttons.size() * m_AnchorPoint.GetY())));
+			m_Position.SetY(PositionY - static_cast<int>(m_Buttons[i]->GetRect().h * m_Buttons.size() * m_AnchorPoint.GetY()));
+		}
+		else
+		{
+			m_Buttons[i]->SetY((m_Buttons[i]->GetRect().h * i) + static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Buttons.size() * m_AnchorPoint.GetY()));
+			m_Position.SetY(static_cast<int>(Window.Height * PercentY) - static_cast<int>(m_Buttons[i]->GetRect().h * m_Buttons.size() * m_AnchorPoint.GetY()));
+		}
+	}
+}
+
+void SidePanel::SetAnchorPoint(float AnchorX, float AnchorY)
+{
+	m_AnchorPoint.SetX(AnchorX);
+	m_AnchorPoint.SetY(AnchorY);
+
+	SetX(m_Position.GetX());
+	SetY(m_Position.GetY());
+}

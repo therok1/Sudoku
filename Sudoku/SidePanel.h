@@ -21,6 +21,12 @@ public:
 	void Update();
 	void Render();
 
+	// Setter Functions
+
+	void SetX(int PositionX, bool A = false, float PercentX = 0.0f);
+	void SetY(int PositionY, bool A = false, float PercentY = 0.0f);
+	void SetAnchorPoint(float AnchorX, float AnchorY);
+
 
 private:
 
