@@ -74,6 +74,9 @@ Game::Game()
 	m_Grid->SetY(0, true, 0.5f);
 	m_Grid->SetAnchorPoint(0.5f, 0.5f);
 
+	m_SidePanel = std::make_unique<SidePanel>();
+	m_SidePanel->GeneratePanel();
+
 	m_Sudoku = std::make_unique<Sudoku>();
 
 	BackgroundAnim = std::make_unique<Animation>(1000, BackgroundLight, BackgroundDark);
@@ -100,6 +103,7 @@ void Game::Tick()
 	else if (m_State == InGame)
 	{
 		m_Grid->Update();
+		m_SidePanel->Update();
 	}
 }
 
@@ -176,6 +180,7 @@ void Game::Render()
 	else if (m_State == InGame)
 	{
 		m_Grid->Render();
+		m_SidePanel->Render();
 	}
 
 	SDL_RenderPresent(Window.Renderer);

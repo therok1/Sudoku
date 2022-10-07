@@ -51,6 +51,7 @@ int main(int argc, char** args)
 		{
 			std::ostringstream Stream;
 			Stream << (1s / FrameTime);
+			Window.FPS = std::stof(Stream.str());
 
 			SDL_SetWindowTitle(Window.Window, (Window.Title + " FPS: " + Stream.str()).c_str());
 		}

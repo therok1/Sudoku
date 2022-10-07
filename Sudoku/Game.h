@@ -12,6 +12,7 @@
 #include "Sudoku.h"
 #include "Board.h"
 #include "DynamicText.h"
+#include "SidePanel.h"
 
 enum GameState
 {
@@ -82,6 +83,10 @@ private:
 	// Sudoku Grid
 
 	std::unique_ptr<Board> m_Grid;
+
+	// Number Panel
+
+	std::unique_ptr<SidePanel> m_SidePanel;
 
 	// Sudoku Puzzle
 
