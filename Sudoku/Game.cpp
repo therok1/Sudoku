@@ -121,8 +121,6 @@ void Game::EventLoop()
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
 			{
-				m_Grid->FillCell(m_State, InGame, m_Selected);
-
 				if (m_Buttons["Start"]->MouseRelease(m_State, InMenu))
 				{
 					m_Sudoku->CreateSeed();
@@ -136,17 +134,27 @@ void Game::EventLoop()
 					m_Grid->FillBoard(Puzzle, PuzzleSolution);
 
 					m_State = InGame;
+
+					break;
 				}
 
 				if (m_Buttons["Settings"]->MouseRelease(m_State, InMenu))
 				{
 					ThemeActivate();
+
+					break;
 				}
 
 				if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
 				{
 					m_Running = false;
+
+					break;
 				}
+
+				m_Grid->FillCell(m_State, InGame, m_Selected);
+
+				break;
 			}
 		default:
 			break; 
