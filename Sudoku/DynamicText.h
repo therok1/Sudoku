@@ -32,6 +32,7 @@ public:
 	// Getter Functions
 
 	SDL_Rect GetRect() const;
+	std::string GetText() const;
 
 private:
 

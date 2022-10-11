@@ -38,6 +38,7 @@ public:
 
 	bool GetFocusable() const;
 	SDL_Rect GetRect() const;
+	std::string GetText() const;
 
 private:
 

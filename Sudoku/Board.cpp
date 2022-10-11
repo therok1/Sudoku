@@ -91,6 +91,8 @@ void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std
 
 void Board::FillCell(enum GameState State, enum GameState DesiredState, int Selected)
 {
+	if (!Selected) { return; }
+
 	int Index = 0;
 
 	for (int j = 0; j < m_Size; j++)

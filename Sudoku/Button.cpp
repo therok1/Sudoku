@@ -203,3 +203,8 @@ SDL_Rect Button::GetRect() const
 {
 	return dst;
 }
+
+std::string Button::GetText() const
+{
+	return m_Text->GetText();
+}

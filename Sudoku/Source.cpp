@@ -23,7 +23,7 @@ int main(int argc, char** args)
 		return 1;
 	}
 
-	Game* GameObj = new Game(); // Cannot use unique pointers due to destructor being called after TTF library has already been closed which results in an exception
+	Game* GameObj = new Game();
 
 	const auto Time = 1s;
 	const auto TargetTime = 1s / 60;

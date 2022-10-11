@@ -51,6 +51,17 @@ void SidePanel::Render()
 	}
 }
 
+void SidePanel::Select(enum GameState State, enum GameState DesiredState, int& Selected)
+{
+	for (auto& Button : m_Buttons)
+	{
+		if (Button->MouseRelease(State, DesiredState))
+		{
+			Selected = std::stoi(Button->GetText());
+		}
+	}
+}
+
 void SidePanel::SetX(int PositionX, bool A, float PercentX)
 {
 	for (int i = 0; i < m_Buttons.size(); i++)

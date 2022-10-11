@@ -128,3 +128,8 @@ SDL_Rect DynamicText::GetRect() const
 {
 	return dst;
 }
+
+std::string DynamicText::GetText() const
+{
+	return m_Message;
+}
