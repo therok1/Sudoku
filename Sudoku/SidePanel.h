@@ -36,6 +36,7 @@ private:
 
 	// Properties
 
+	int m_Padding;
 	Vector2D m_AnchorPoint;
 	Vector2D m_Position;
 	Vector2D m_SqSize;

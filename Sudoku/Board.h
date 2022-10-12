@@ -36,6 +36,8 @@ public:
 private:
 
 	std::vector<std::unique_ptr<Button>> m_Buttons;
+	std::vector<SDL_Rect> m_VerticalLines;
+	std::vector<SDL_Rect> m_HorizontalLines;
 	std::array<std::array<int, 9>, 9> m_Sudoku;
 	std::array<std::array<int, 9>, 9> m_SudokuSolution;
 	

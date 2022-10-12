@@ -11,8 +11,8 @@ void Lerp(SDL_Color* Out, SDL_Color Start, SDL_Color End, float Factor)
 
 Game::Game()
 {
-	SDL_Color PrimaryColor = { 215, 242, 250, 255 };
-	SDL_Color SecondaryColor = { 197, 228, 237, 255 };
+	SDL_Color PrimaryColor = { 230, 230, 230, 255 }; // 215 242 250
+	SDL_Color SecondaryColor = { 220, 220, 220, 255 }; // 197 228 237
 
 	SDL_Color BackgroundLight = { 255, 255, 255, 255 };
 	SDL_Color BackgroundDark = { 54, 57, 63, 255 };
@@ -31,6 +31,19 @@ Game::Game()
 	m_Title->SetText("Sudoku");
 	m_Title->SetFontSize(100);
 	m_Title->SetFocusable(false);
+
+	m_Title1 = std::make_unique<Button>(400, 100, 0, 30, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Title1->SetColour({ 0, 0, 0, 0 });
+	m_Title1->SetText("Sudoku");
+	m_Title1->SetFontSize(50);
+	m_Title1->SetFocusable(false);
+
+	m_Timer = std::make_unique<Button>(400, 100, 0, 60, 0.5f, 0.0f, 0.5f, 0.0f);
+	m_Timer->SetColour({ 0, 0, 0, 0 });
+	m_Timer->SetText("00:00 - 0 Mistakes");
+	m_Timer->SetFontSize(15);
+	m_Timer->SetFont("Assets/Fonts/UniSansThin.ttf");
+	m_Timer->SetFocusable(false);
 
 	m_Credits = std::make_unique<Button>(400, 100, 0, 200, 0.5f, 0.0f, 0.5f, 0.0f);
 	m_Credits->SetColour({ 0, 0, 0, 0 });
@@ -71,8 +84,9 @@ Game::Game()
 
 	m_SidePanel = std::make_unique<SidePanel>();
 	m_SidePanel->GeneratePanel();
-	m_SidePanel->SetX(0, true, 1.0f);
-	m_SidePanel->SetAnchorPoint(1.0f, 0.0f);
+	m_SidePanel->SetX(0, true, 0.5f);
+	m_SidePanel->SetY(0, true, 0.9f);
+	m_SidePanel->SetAnchorPoint(0.5f, 1.0f);
 
 	m_Sudoku = std::make_unique<Sudoku>();
 
@@ -169,6 +183,8 @@ void Game::Render()
 	m_Buttons["Settings"]->SetColour(ButtonsAnim->Result);
 	m_Buttons["Quit"]->SetColour(ButtonsAnim->Result);
 
+	m_Title1->SetTextColour(TextAnim->Result);
+	m_Timer->SetTextColour(TextAnim->Result);
 	m_Buttons["Title"]->SetTextColour(TextAnim->Result);
 	m_Buttons["Credits"]->SetTextColour(TextAnim->Result);
 	m_Buttons["Start"]->SetTextColour(TextAnim->Result);
@@ -190,6 +206,8 @@ void Game::Render()
 	{
 		m_Grid->Render();
 		m_SidePanel->Render();
+		m_Title1->Render();
+		m_Timer->Render();
 	}
 
 	SDL_RenderPresent(Window.Renderer);

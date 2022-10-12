@@ -74,6 +74,8 @@ private:
 	// Menu Buttons
 
 	std::unique_ptr<Button> m_Title;
+	std::unique_ptr<Button> m_Title1;
+	std::unique_ptr<Button> m_Timer;
 	std::unique_ptr<Button> m_Credits;
 	std::unique_ptr<Button> m_Start;
 	std::unique_ptr<Button> m_Settings;

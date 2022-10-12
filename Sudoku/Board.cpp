@@ -17,6 +17,10 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	m_SqSize.SetX(50);
 	m_SqSize.SetY(50);
 
+	m_Buttons.reserve(Size);
+	m_VerticalLines.reserve((m_Size / 3) - 1);
+	m_HorizontalLines.reserve((m_Size / 3) - 1);
+
 	int Index = 0;
 
 	for (int i = 0; i < m_Size; i++)
@@ -28,12 +32,12 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 			if (i % 2 == j % 2)
 			{
 				m_Buttons[Index]->SetColour(PrimaryColour);
-				m_Buttons[Index]->SetTextColour({ 0, 150, 201, 255 });
+				m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 }); // 0 150 201
 			}
 			else
 			{
 				m_Buttons[Index]->SetColour(SecondaryColour);
-				m_Buttons[Index]->SetTextColour({ 0, 108, 145, 255 });
+				m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 }); // 0 108 145
 			}
 
 			m_Buttons[Index]->SetText(std::to_string(Index));
@@ -42,7 +46,17 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 		}
 	}
 
-	m_Buttons.shrink_to_fit();
+	for (int i = 1; i <= (m_Size / 3) - 1; i++)
+	{
+		SDL_Rect Line = { i * 3 * m_SqSize.GetX() - 1, 0, 2, m_Size * m_SqSize.GetY() };
+		m_VerticalLines.push_back(Line);
+	}
+
+	for (int i = 1; i <= (m_Size / 3) - 1; i++)
+	{
+		SDL_Rect Line = { 0, i * 3 * m_SqSize.GetY() - 1, m_Size * m_SqSize.GetX(), 2 };
+		m_HorizontalLines.push_back(Line);
+	}
 }
 
 Board::~Board()
@@ -108,17 +122,17 @@ void Board::FillCell(enum GameState State, enum GameState DesiredState, int Sele
 
 					if (m_SudokuSolution[j][i] != Selected)
 					{
-						m_Buttons[Index]->SetTextColour({ 255, 0, 0, 255 }); // Mark incorrect field with red
+						m_Buttons[Index]->SetTextColour({ 255, 54, 54, 255 }); // Mark incorrect field with red
 					}
 					else
 					{
 						if (i % 2 == j % 2)
 						{
-							m_Buttons[Index]->SetTextColour({ 0, 150, 201, 255 });
+							m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 });
 						}
 						else
 						{
-							m_Buttons[Index]->SetTextColour({ 0, 108, 145, 255 });
+							m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 });
 						}
 					}
 				}
@@ -142,6 +156,18 @@ void Board::Render()
 	for (auto& Button : m_Buttons)
 	{
 		Button->Render();
+	}
+
+	for (auto& VerticalLine : m_VerticalLines)
+	{
+		SDL_SetRenderDrawColor(Window.Renderer, 200, 200, 200, 255);
+		SDL_RenderFillRect(Window.Renderer, &VerticalLine);
+	}
+
+	for (auto& HorizontalLine : m_HorizontalLines)
+	{
+		SDL_SetRenderDrawColor(Window.Renderer, 200, 200, 200, 255);
+		SDL_RenderFillRect(Window.Renderer, &HorizontalLine);
 	}
 }
 
@@ -167,12 +193,22 @@ void Board::SetX(int PositionX, bool A, float PercentX)
 			Index++;
 		}
 	}
+	
+	for (int i = 0; i < m_VerticalLines.size(); i++)
+	{
+		m_VerticalLines[i].x = m_Buttons[0]->GetRect().x + (i + 1) * 3 * m_SqSize.GetX() - 1;
+	}
+	
+	for (int i = 0; i < m_HorizontalLines.size(); i++)
+	{
+		m_HorizontalLines[i].x = m_Buttons[0]->GetRect().x;
+	}
 }
 
 void Board::SetY(int PositionY, bool A, float PercentY)
 {
 	int Index = 0;
-
+	
 	for (int j = 0; j < m_Size; j++)
 	{
 		for (int i = 0; i < m_Size; i++)
@@ -190,6 +226,16 @@ void Board::SetY(int PositionY, bool A, float PercentY)
 
 			Index++;
 		}
+	}
+
+	for (int i = 0; i < m_VerticalLines.size(); i++)
+	{
+		m_VerticalLines[i].y = m_Buttons[0]->GetRect().y;
+	}
+
+	for (int i = 0; i < m_HorizontalLines.size(); i++)
+	{
+		m_HorizontalLines[i].y = m_Buttons[0]->GetRect().y + (i + 1) * 3 * m_SqSize.GetY() - 1;
 	}
 }
 

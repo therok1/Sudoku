@@ -3,7 +3,7 @@
 DynamicText::DynamicText()
 {
 	m_Message = " ";
-	m_FontSize = 16;
+	m_FontSize = 20;
 	m_FontPath = "Assets/Fonts/UniSans.ttf";
 	m_Colour = { 0, 0, 0, 255 };
 
