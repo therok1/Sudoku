@@ -1,26 +1,11 @@
 #include "Game.h"
 
-void Lerp(SDL_Color* Out, SDL_Color Start, SDL_Color End, float Factor)
-{
-	float Temp = 1.0f - Factor;
-
-	Out->r = static_cast<float>(Start.r) * Temp + static_cast<float>(End.r) * Factor;
-	Out->g = static_cast<float>(Start.g) * Temp + static_cast<float>(End.g) * Factor;
-	Out->b = static_cast<float>(Start.b) * Temp + static_cast<float>(End.b) * Factor;
-}
-
 Game::Game()
 {
 	SDL_Color PrimaryColor = { 230, 230, 230, 255 }; // 215 242 250
 	SDL_Color SecondaryColor = { 220, 220, 220, 255 }; // 197 228 237
 
-	SDL_Color BackgroundLight = { 255, 255, 255, 255 };
-	SDL_Color BackgroundDark = { 54, 57, 63, 255 };
 	SDL_Color ButtonsLight = { 230, 230, 230, 255 };
-	SDL_Color ButtonsDark = { 47, 49, 54, 255 };
-
-	SDL_Color TextLight = { 0, 0, 0, 255 };
-	SDL_Color TextDark = { 255, 255, 255, 255 };
 
 	m_Mistakes = 0;
 	m_Selected = 0;
@@ -97,10 +82,6 @@ Game::Game()
 	m_SidePanel->SetAnchorPoint(0.5f, 1.0f);
 
 	m_Sudoku = std::make_unique<Sudoku>();
-
-	BackgroundAnim = std::make_unique<Animation>(1000, BackgroundLight, BackgroundDark);
-	ButtonsAnim = std::make_unique<Animation>(1000, ButtonsLight, ButtonsDark);
-	TextAnim = std::make_unique<Animation>(1000, TextLight, TextDark);
 }
 
 Game::~Game()
@@ -110,8 +91,6 @@ Game::~Game()
 
 void Game::Tick()
 {
-	ThemeUpdate();
-
 	if (m_State == InMenu)
 	{
 		for (const auto& Button : m_MenuButtons)
@@ -186,8 +165,6 @@ void Game::EventLoop()
 
 				if (m_MenuButtons["Settings"]->MouseRelease(m_State, InMenu))
 				{
-					ThemeActivate();
-
 					break;
 				}
 
@@ -215,20 +192,7 @@ void Game::EventLoop()
 
 void Game::Render()
 {
-	m_MenuButtons["Start"]->SetColour(ButtonsAnim->Result);
-	m_MenuButtons["Settings"]->SetColour(ButtonsAnim->Result);
-	m_MenuButtons["Quit"]->SetColour(ButtonsAnim->Result);
-
-	m_Title1->SetTextColour(TextAnim->Result);
-	m_Timer->SetTextColour(TextAnim->Result);
-
-	m_MenuButtons["Title"]->SetTextColour(TextAnim->Result);
-	m_MenuButtons["Credits"]->SetTextColour(TextAnim->Result);
-	m_MenuButtons["Start"]->SetTextColour(TextAnim->Result);
-	m_MenuButtons["Settings"]->SetTextColour(TextAnim->Result);
-	m_MenuButtons["Quit"]->SetTextColour(TextAnim->Result);
-
-	SDL_SetRenderDrawColor(Window.Renderer, BackgroundAnim->Result.r, BackgroundAnim->Result.g, BackgroundAnim->Result.b, 255);
+	SDL_SetRenderDrawColor(Window.Renderer, 255, 255, 255, 255);
 
 	SDL_RenderClear(Window.Renderer);
 
@@ -249,92 +213,6 @@ void Game::Render()
 	}
 
 	SDL_RenderPresent(Window.Renderer);
-}
-
-void Game::ThemeUpdate()
-{
-	BackgroundAnim->CurrentTime = SDL_GetTicks();
-
-	if (BackgroundAnim->Active)
-	{
-		if (BackgroundAnim->CurrentTime > BackgroundAnim->StartTime + BackgroundAnim->Duration)
-		{
-			BackgroundAnim->Active = false;
-			Settings.DarkMode = !Settings.DarkMode;
-		}
-		else
-		{
-			float Factor = (static_cast<float>(BackgroundAnim->CurrentTime - BackgroundAnim->StartTime) / BackgroundAnim->Duration);
-
-			if (!Settings.DarkMode)
-			{
-				Lerp(&BackgroundAnim->Result, BackgroundAnim->Start, BackgroundAnim->End, Factor);
-			}
-			else
-			{
-				Lerp(&BackgroundAnim->Result, BackgroundAnim->End, BackgroundAnim->Start, Factor);
-			}
-		}
-	}
-
-	ButtonsAnim->CurrentTime = SDL_GetTicks();
-
-	if (ButtonsAnim->Active)
-	{
-		if (ButtonsAnim->CurrentTime > ButtonsAnim->StartTime + ButtonsAnim->Duration)
-		{
-			ButtonsAnim->Active = false;
-		}
-		else
-		{
-			float Factor = (static_cast<float>(ButtonsAnim->CurrentTime - ButtonsAnim->StartTime) / ButtonsAnim->Duration);
-
-			if (!Settings.DarkMode)
-			{
-				Lerp(&ButtonsAnim->Result, ButtonsAnim->Start, ButtonsAnim->End, Factor);
-			}
-			else
-			{
-				Lerp(&ButtonsAnim->Result, ButtonsAnim->End, ButtonsAnim->Start, Factor);
-			}
-		}
-	}
-
-
-	TextAnim->CurrentTime = SDL_GetTicks();
-
-	if (TextAnim->Active)
-	{
-		if (TextAnim->CurrentTime > TextAnim->StartTime + TextAnim->Duration)
-		{
-			TextAnim->Active = false;
-		}
-		else
-		{
-			float Factor = (static_cast<float>(TextAnim->CurrentTime - TextAnim->StartTime) / TextAnim->Duration);
-
-			if (!Settings.DarkMode)
-			{
-				Lerp(&TextAnim->Result, TextAnim->Start, TextAnim->End, Factor);
-			}
-			else
-			{
-				Lerp(&TextAnim->Result, TextAnim->End, TextAnim->Start, Factor);
-			}
-		}
-	}
-}
-
-void Game::ThemeActivate()
-{
-	BackgroundAnim->Active = true;
-	BackgroundAnim->StartTime = BackgroundAnim->CurrentTime;
-
-	ButtonsAnim->Active = true;
-	ButtonsAnim->StartTime = ButtonsAnim->CurrentTime;
-
-	TextAnim->Active = true;
-	TextAnim->StartTime = TextAnim->CurrentTime;
 }
 
 bool Game::GetRunning() const
