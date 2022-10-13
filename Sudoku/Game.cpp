@@ -171,7 +171,6 @@ void Game::EventLoop()
 					m_Sudoku->CreateSeed();
 					m_Sudoku->GeneratePuzzle();
 					m_Sudoku->CalculateDifficulty();
-					m_Sudoku->PrintGrid();
 
 					std::array<std::array<int, 9>, 9> Puzzle = m_Sudoku->GetGrid();
 					std::array<std::array<int, 9>, 9> PuzzleSolution = m_Sudoku->GetSolutionGrid();

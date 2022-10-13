@@ -20,7 +20,6 @@ public:
 
 	void FillEmptyDiagonalBox(int Index);
 	void CreateSeed();
-	void PrintGrid();
 	void CountSolutions(int& Number);
 	void GeneratePuzzle();
 	void CalculateDifficulty();

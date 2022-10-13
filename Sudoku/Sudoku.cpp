@@ -245,25 +245,6 @@ bool Sudoku::VerifyGridStatus()
 	return m_GridStatus;
 }
 
-void Sudoku::PrintGrid()
-{
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			if (m_Grid[i][j] == 0)
-				std::cout << ".";
-			else
-				std::cout << m_Grid[i][j];
-			std::cout << "|";
-		}
-		std::cout << std::endl;
-	}
-
-	std::cout << "\nDifficulty of current sudoku(0 being easiest): " << m_DifficultyLevel;
-	std::cout << std::endl;
-}
-
 bool Sudoku::SolveGrid()
 {
 	int Row, Col;
