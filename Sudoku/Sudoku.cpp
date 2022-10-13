@@ -1,10 +1,5 @@
 #include "Sudoku.h"
 
-int Random(int MaxRange)
-{
-	return rand() % MaxRange;
-}
-
 bool FindUnassignedLocation(const std::array<std::array<int, 9>, 9>& m_Grid, int& Row, int& Col)
 {
 	for (Row = 0; Row < 9; Row++)
@@ -72,7 +67,10 @@ void Sudoku::FillEmptyDiagonalBox(int Index)
 {
 	int Start = Index * 3;
 
-	std::random_shuffle(std::begin(m_Numbers), std::end(m_Numbers), Random);
+	std::random_device RandomDevice;
+	std::mt19937 Generator(RandomDevice());
+
+	std::shuffle(std::begin(m_Numbers), std::end(m_Numbers), Generator);
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -113,14 +111,17 @@ Sudoku::Sudoku()
 		m_GridPosition[i] = i;
 	}
 
-	std::random_shuffle(std::begin(m_GridPosition), std::end(m_GridPosition), Random);
+	std::random_device RandomDevice;
+	std::mt19937 Generator(RandomDevice());
+
+	std::shuffle(std::begin(m_GridPosition), std::end(m_GridPosition), Generator);
 
 	for (int i = 0; i < 9; i++)
 	{
 		m_Numbers[i] = i + 1;
 	}
 
-	std::random_shuffle(std::begin(m_Numbers), std::end(m_Numbers), Random);
+	std::shuffle(std::begin(m_Numbers), std::end(m_Numbers), Generator);
 
 	for (int i = 0; i < 9; i++)
 	{
@@ -231,7 +232,10 @@ Sudoku::Sudoku(const std::string& GridString, bool RowMajor)
 		m_Numbers[i] = i + 1;
 	}
 
-	std::random_shuffle(std::begin(m_Numbers), std::end(m_Numbers), Random);
+	std::random_device RandomDevice;
+	std::mt19937 Generator(RandomDevice());
+
+	std::shuffle(std::begin(m_Numbers), std::end(m_Numbers), Generator);
 
 	m_GridStatus = true;
 }

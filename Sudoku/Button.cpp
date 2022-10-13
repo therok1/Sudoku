@@ -194,6 +194,17 @@ void Button::SetTextColour(SDL_Color Colour)
 	m_Text->SetColour(Colour);
 }
 
+void Button::SetTextAlpha(Uint8 Alpha)
+{
+	m_Text->SetAlpha(Alpha);
+}
+
+void Button::SetFitText()
+{
+	dst.w = m_Text->GetRect().w;
+	dst.h = m_Text->GetRect().h;
+}
+
 bool Button::GetFocusable() const
 {
 	return m_Focusable;

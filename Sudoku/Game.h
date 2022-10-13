@@ -6,6 +6,8 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <chrono>
+#include <format>
 
 #include "Manager.h"
 #include "Button.h"
@@ -67,21 +69,27 @@ private:
 
 	// Properties
 
-	int m_Selected;
+	Uint16 m_Mistakes;
+	Uint8 m_Selected;
 	bool m_Running;
 	GameState m_State;
+	std::chrono::steady_clock::time_point m_GameStart;
 
 	// Menu Buttons
 
 	std::unique_ptr<Button> m_Title;
-	std::unique_ptr<Button> m_Title1;
-	std::unique_ptr<Button> m_Timer;
 	std::unique_ptr<Button> m_Credits;
 	std::unique_ptr<Button> m_Start;
 	std::unique_ptr<Button> m_Settings;
 	std::unique_ptr<Button> m_Quit;
 
-	std::map<std::string, std::unique_ptr<Button>> m_Buttons;
+	std::map<std::string, std::unique_ptr<Button>> m_MenuButtons;
+
+	// In-Game Buttons
+
+	std::unique_ptr<Button> m_Title1;
+	std::unique_ptr<Button> m_Timer;
+	std::unique_ptr<Button> m_MouseIcon;
 
 	// Sudoku Grid
 

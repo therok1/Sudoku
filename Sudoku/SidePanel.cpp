@@ -61,7 +61,7 @@ void SidePanel::Render()
 	}
 }
 
-void SidePanel::Select(enum GameState State, enum GameState DesiredState, int& Selected)
+void SidePanel::Select(enum GameState State, enum GameState DesiredState, Uint8& Selected)
 {
 	for (auto& Button : m_Buttons)
 	{

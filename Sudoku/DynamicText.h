@@ -28,6 +28,7 @@ public:
 	void SetX(int PositionX);
 	void SetY(int PositionY);
 	void SetColour(SDL_Color Colour);
+	void SetAlpha(Uint8 Alpha);
 
 	// Getter Functions
 

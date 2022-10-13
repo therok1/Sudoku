@@ -3,14 +3,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <time.h>
-#include <memory>
-#include <chrono>
-#include <sstream>
 
 #include "Game.h"
 #include "Manager.h"
-
-using namespace std::literals;
 
 bool init();
 
@@ -25,36 +20,11 @@ int main(int argc, char** args)
 
 	Game* GameObj = new Game();
 
-	const auto Time = 1s;
-	const auto TargetTime = 1s / 60;
-	auto CurrentTime = std::chrono::steady_clock::now();
-	auto Accumulator = 0ns;
-	
 	while (GameObj->GetRunning())
 	{
-		auto NewTime = std::chrono::steady_clock::now();
-		auto FrameTime = NewTime - CurrentTime;
-		CurrentTime = NewTime;
-
-		Accumulator += FrameTime;
-
-		if (Accumulator >= TargetTime)
-		{
-			GameObj->Tick();
-			GameObj->EventLoop();
-			GameObj->Render();
-
-			Accumulator -= std::chrono::duration_cast<std::chrono::nanoseconds>(TargetTime);
-		}
-
-		if (FrameTime != 0ns)
-		{
-			std::ostringstream Stream;
-			Stream << (1s / FrameTime);
-			Window.FPS = std::stof(Stream.str());
-
-			SDL_SetWindowTitle(Window.Window, (Window.Title + " FPS: " + Stream.str()).c_str());
-		}
+		GameObj->Tick();
+		GameObj->EventLoop();
+		GameObj->Render();
 	}
 
 	delete GameObj;

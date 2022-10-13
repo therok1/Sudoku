@@ -69,6 +69,8 @@ void DynamicText::Render()
 		std::cout << "Couldn't create surface: " << TTF_GetError() << std::endl;
 	}
 
+	SDL_SetTextureAlphaMod(m_Texture, m_Colour.a);
+
 	TTF_SizeText(m_Font, m_Message.c_str(), &dst.w, &dst.h);
 
 	SDL_FreeSurface(m_Surface);
@@ -122,6 +124,11 @@ void DynamicText::SetY(int PositionY)
 void DynamicText::SetColour(SDL_Color Colour)
 {
 	m_Colour = Colour;
+}
+
+void DynamicText::SetAlpha(Uint8 Alpha)
+{
+	m_Colour.a = Alpha;
 }
 
 SDL_Rect DynamicText::GetRect() const

@@ -33,6 +33,8 @@ public:
 	void SetY(int PositionY);
 	void SetColour(SDL_Color Colour);
 	void SetTextColour(SDL_Color Colour);
+	void SetTextAlpha(Uint8 Alpha);
+	void SetFitText();
 
 	// Getter Functions
 

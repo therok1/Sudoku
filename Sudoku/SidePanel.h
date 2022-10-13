@@ -20,7 +20,7 @@ public:
 	void GeneratePanel();
 	void Update();
 	void Render();
-	void Select(enum GameState State, enum GameState DesiredState, int& Selected);
+	void Select(enum GameState State, enum GameState DesiredState, Uint8& Selected);
 
 	// Setter Functions
 

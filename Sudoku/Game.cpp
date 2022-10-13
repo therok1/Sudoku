@@ -22,9 +22,11 @@ Game::Game()
 	SDL_Color TextLight = { 0, 0, 0, 255 };
 	SDL_Color TextDark = { 255, 255, 255, 255 };
 
+	m_Mistakes = 0;
 	m_Selected = 0;
 	m_Running = true;
 	m_State = InMenu;
+	m_GameStart = std::chrono::steady_clock::now();
 
 	m_Title = std::make_unique<Button>(400, 100, 0, 150, 0.5f, 0.0f, 0.5f, 0.0f);
 	m_Title->SetColour({ 0, 0, 0, 0 });
@@ -70,11 +72,17 @@ Game::Game()
 	m_Quit->SetFontSize(20);
 	m_Quit->SetTextColour({ 0, 0, 0, 255 });
 
-	m_Buttons.emplace("Title", std::move(m_Title));
-	m_Buttons.emplace("Credits", std::move(m_Credits));
-	m_Buttons.emplace("Start", std::move(m_Start));
-	m_Buttons.emplace("Settings", std::move(m_Settings));
-	m_Buttons.emplace("Quit", std::move(m_Quit));
+	m_MouseIcon = std::make_unique<Button>(30, 30, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f);
+	m_MouseIcon->SetColour({ 255, 0, 0, 0 });
+	m_MouseIcon->SetText("0");
+	m_MouseIcon->SetFontSize(20);
+	m_MouseIcon->SetTextColour({ 0, 0, 0, 255 });
+
+	m_MenuButtons.emplace("Title", std::move(m_Title));
+	m_MenuButtons.emplace("Credits", std::move(m_Credits));
+	m_MenuButtons.emplace("Start", std::move(m_Start));
+	m_MenuButtons.emplace("Settings", std::move(m_Settings));
+	m_MenuButtons.emplace("Quit", std::move(m_Quit));
 
 	m_Grid = std::make_unique<Board>(81, PrimaryColor, SecondaryColor);
 	m_Grid->GenerateBoard();
@@ -106,15 +114,25 @@ void Game::Tick()
 
 	if (m_State == InMenu)
 	{
-		for (const auto& Button : m_Buttons)
+		for (const auto& Button : m_MenuButtons)
 		{
 			Button.second->Update();
 		}
 	}
 	else if (m_State == InGame)
 	{
+		std::chrono::steady_clock::duration TimeElapsed = std::chrono::steady_clock::now() - m_GameStart;
+		std::chrono::seconds Seconds = std::chrono::duration_cast<std::chrono::seconds>(TimeElapsed);
+		
 		m_Grid->Update();
 		m_SidePanel->Update();
+
+		m_Timer->SetText(std::format("{:%T} - {} {}", std::chrono::round<std::chrono::seconds>(std::chrono::duration<int>{ Seconds.count() }), m_Mistakes, m_Mistakes == 1 ? "Mistake" : "Mistakes"));
+
+		m_MouseIcon->SetText(m_Selected ? std::to_string(m_Selected) : "CLR");
+		m_MouseIcon->SetFitText();
+		m_MouseIcon->SetX(Mouse.MouseCoords.x - m_MouseIcon->GetRect().w - 10);
+		m_MouseIcon->SetY(Mouse.MouseCoords.y);
 	}
 }
 
@@ -132,10 +150,23 @@ void Game::EventLoop()
 			m_Running = false;
 
 			break;
+		case SDL_WINDOWEVENT:
+			switch (Event.window.event)
+			{
+			case SDL_WINDOWEVENT_LEAVE:
+				m_MouseIcon->SetTextAlpha(0);
+
+				break;
+			case SDL_WINDOWEVENT_ENTER:
+				m_MouseIcon->SetTextAlpha(255);
+
+				break;
+			}
+			break;
 		case SDL_MOUSEBUTTONUP:
 			if (Event.button.button == SDL_BUTTON_LEFT)
 			{
-				if (m_Buttons["Start"]->MouseRelease(m_State, InMenu))
+				if (m_MenuButtons["Start"]->MouseRelease(m_State, InMenu))
 				{
 					m_Sudoku->CreateSeed();
 					m_Sudoku->GeneratePuzzle();
@@ -149,28 +180,34 @@ void Game::EventLoop()
 
 					m_State = InGame;
 
+					m_GameStart = std::chrono::steady_clock::now();
+
 					break;
 				}
 
-				if (m_Buttons["Settings"]->MouseRelease(m_State, InMenu))
+				if (m_MenuButtons["Settings"]->MouseRelease(m_State, InMenu))
 				{
 					ThemeActivate();
 
 					break;
 				}
 
-				if (m_Buttons["Quit"]->MouseRelease(m_State, InMenu))
+				if (m_MenuButtons["Quit"]->MouseRelease(m_State, InMenu))
 				{
 					m_Running = false;
 
 					break;
 				}
 
-				m_Grid->FillCell(m_State, InGame, m_Selected);
+				m_Grid->FillCell(m_State, InGame, m_Selected, m_Mistakes);
 				m_SidePanel->Select(m_State, InGame, m_Selected);
-
-				break;
 			}
+			else if (Event.button.button == SDL_BUTTON_RIGHT)
+			{
+				m_Selected = 0;
+			}
+
+			break;
 		default:
 			break; 
 		}
@@ -179,17 +216,18 @@ void Game::EventLoop()
 
 void Game::Render()
 {
-	m_Buttons["Start"]->SetColour(ButtonsAnim->Result);
-	m_Buttons["Settings"]->SetColour(ButtonsAnim->Result);
-	m_Buttons["Quit"]->SetColour(ButtonsAnim->Result);
+	m_MenuButtons["Start"]->SetColour(ButtonsAnim->Result);
+	m_MenuButtons["Settings"]->SetColour(ButtonsAnim->Result);
+	m_MenuButtons["Quit"]->SetColour(ButtonsAnim->Result);
 
 	m_Title1->SetTextColour(TextAnim->Result);
 	m_Timer->SetTextColour(TextAnim->Result);
-	m_Buttons["Title"]->SetTextColour(TextAnim->Result);
-	m_Buttons["Credits"]->SetTextColour(TextAnim->Result);
-	m_Buttons["Start"]->SetTextColour(TextAnim->Result);
-	m_Buttons["Settings"]->SetTextColour(TextAnim->Result);
-	m_Buttons["Quit"]->SetTextColour(TextAnim->Result);
+
+	m_MenuButtons["Title"]->SetTextColour(TextAnim->Result);
+	m_MenuButtons["Credits"]->SetTextColour(TextAnim->Result);
+	m_MenuButtons["Start"]->SetTextColour(TextAnim->Result);
+	m_MenuButtons["Settings"]->SetTextColour(TextAnim->Result);
+	m_MenuButtons["Quit"]->SetTextColour(TextAnim->Result);
 
 	SDL_SetRenderDrawColor(Window.Renderer, BackgroundAnim->Result.r, BackgroundAnim->Result.g, BackgroundAnim->Result.b, 255);
 
@@ -197,7 +235,7 @@ void Game::Render()
 
 	if (m_State == InMenu)
 	{
-		for (const auto& Button : m_Buttons)
+		for (const auto& Button : m_MenuButtons)
 		{
 			Button.second->Render();
 		}
@@ -208,6 +246,7 @@ void Game::Render()
 		m_SidePanel->Render();
 		m_Title1->Render();
 		m_Timer->Render();
+		m_MouseIcon->Render();
 	}
 
 	SDL_RenderPresent(Window.Renderer);

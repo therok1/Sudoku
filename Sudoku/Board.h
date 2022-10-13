@@ -23,7 +23,7 @@ public:
 	void GenerateBoard();
 	void GenerateSolution(const std::array<std::array<int, 9>, 9>& Sudoku);
 	void FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std::array<std::array<int, 9>, 9>& SudokuSolution);
-	void FillCell(enum GameState State, enum GameState DesiredState, int Selected);
+	void FillCell(enum GameState State, enum GameState DesiredState, Uint8 Selected, Uint16& Mistakes);
 	void Update();
 	void Render();
 

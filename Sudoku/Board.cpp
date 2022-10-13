@@ -103,10 +103,8 @@ void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std
 	m_SudokuSolution = SudokuSolution;
 }
 
-void Board::FillCell(enum GameState State, enum GameState DesiredState, int Selected)
+void Board::FillCell(enum GameState State, enum GameState DesiredState, Uint8 Selected, Uint16& Mistakes)
 {
-	if (!Selected) { return; }
-
 	int Index = 0;
 
 	for (int j = 0; j < m_Size; j++)
@@ -117,12 +115,17 @@ void Board::FillCell(enum GameState State, enum GameState DesiredState, int Sele
 			{
 				if (m_Sudoku[j][i] == 0 || m_Sudoku[j][i] != m_SudokuSolution[j][i])
 				{
-					m_Buttons[Index]->SetText(std::to_string(Selected));
+					m_Buttons[Index]->SetText(Selected ? std::to_string(Selected) : " ");
 					m_Sudoku[j][i] = Selected;
 
 					if (m_SudokuSolution[j][i] != Selected)
 					{
 						m_Buttons[Index]->SetTextColour({ 255, 54, 54, 255 }); // Mark incorrect field with red
+
+						if (Selected)
+						{
+							Mistakes++;
+						}
 					}
 					else
 					{
