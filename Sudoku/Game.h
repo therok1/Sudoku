@@ -36,6 +36,15 @@ public:
 	void EventLoop();
 	void Render();
 
+	void ConstructMenuUI();
+	void ConstructGameUI();
+
+	void RenderMenuUI();
+	void RenderGameUI();
+
+	void UpdateMenuUI();
+	void UpdateGameUI();
+
 	// Getter Functions
 
 	bool GetRunning() const;
@@ -52,19 +61,11 @@ private:
 
 	// Menu Buttons
 
-	std::unique_ptr<Button> m_Title;
-	std::unique_ptr<Button> m_Credits;
-	std::unique_ptr<Button> m_Start;
-	std::unique_ptr<Button> m_Settings;
-	std::unique_ptr<Button> m_Quit;
-
-	std::map<std::string, std::unique_ptr<Button>> m_MenuButtons;
+	std::map<std::string, std::unique_ptr<Button>> m_MenuElements;
 
 	// In-Game Buttons
 
-	std::unique_ptr<Button> m_Title1;
-	std::unique_ptr<Button> m_Timer;
-	std::unique_ptr<Button> m_MouseIcon;
+	std::map<std::string, std::unique_ptr<Button>> m_GameElements;
 
 	// Sudoku Grid
 

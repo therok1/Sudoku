@@ -7,13 +7,16 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 	m_SudokuSolution = { 0 };
 
 	m_Size = sqrt(Size);
+
 	m_PrimaryColour = PrimaryColour;
 	m_SecondaryColour = SecondaryColour;
 
 	m_AnchorPoint.SetX(0);
 	m_AnchorPoint.SetY(0);
+
 	m_Position.SetX(0);
 	m_Position.SetY(0);
+
 	m_SqSize.SetX(50);
 	m_SqSize.SetY(50);
 
@@ -32,15 +35,14 @@ Board::Board(Uint16 Size, SDL_Color PrimaryColour, SDL_Color SecondaryColour)
 			if (i % 2 == j % 2)
 			{
 				m_Buttons[Index]->SetColour(PrimaryColour);
-				m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 }); // 0 150 201
 			}
 			else
 			{
 				m_Buttons[Index]->SetColour(SecondaryColour);
-				m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 }); // 0 108 145
 			}
 
 			m_Buttons[Index]->SetText(std::to_string(Index));
+			m_Buttons[Index]->SetTextColour(SDL_Color(0, 0, 0, 255));
 
 			Index++;
 		}
@@ -120,7 +122,7 @@ void Board::FillCell(enum GameState State, enum GameState DesiredState, Uint8 Se
 
 					if (m_SudokuSolution[j][i] != Selected)
 					{
-						m_Buttons[Index]->SetTextColour({ 255, 54, 54, 255 }); // Mark incorrect field with red
+						m_Buttons[Index]->SetTextColour(SDL_Color(255, 54, 54, 255)); // Mark incorrect field with red
 
 						if (Selected)
 						{
@@ -129,14 +131,7 @@ void Board::FillCell(enum GameState State, enum GameState DesiredState, Uint8 Se
 					}
 					else
 					{
-						if (i % 2 == j % 2)
-						{
-							m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 });
-						}
-						else
-						{
-							m_Buttons[Index]->SetTextColour({ 0, 0, 0, 255 });
-						}
+						m_Buttons[Index]->SetTextColour(SDL_Color(0, 0, 0, 255));
 					}
 				}
 			}

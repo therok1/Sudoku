@@ -18,7 +18,7 @@ int main(int argc, char** args)
 		return 1;
 	}
 
-	Game* GameObj = new Game();
+	std::unique_ptr<Game> GameObj = std::make_unique<Game>();
 
 	while (GameObj->GetRunning())
 	{
@@ -27,7 +27,7 @@ int main(int argc, char** args)
 		GameObj->Render();
 	}
 
-	delete GameObj;
+	GameObj.reset();
 
 	IMG_Quit();
 	TTF_Quit();
