@@ -13,6 +13,7 @@ Game::Game()
 
 	ConstructMenuUI();
 	ConstructGameUI();
+	ConstructEndMenuUI();
 }
 
 Game::~Game()
@@ -39,6 +40,10 @@ void Game::Tick()
 		m_GameElements["Selected"]->SetFitText();
 		m_GameElements["Selected"]->SetX(Mouse.MouseCoords.x - m_GameElements["Selected"]->GetRect().w - 10);
 		m_GameElements["Selected"]->SetY(Mouse.MouseCoords.y);
+	}
+	else if (m_State == InEndMenu)
+	{
+		UpdateEndMenuUI();
 	}
 }
 
@@ -104,6 +109,11 @@ void Game::EventLoop()
 
 				m_Grid->FillCell(m_State, InGame, m_Selected, m_Mistakes);
 				m_SidePanel->Select(m_State, InGame, m_Selected);
+
+				if (m_Mistakes > 3)
+				{
+					m_State = InEndMenu;
+				}
 			}
 			else if (Event.button.button == SDL_BUTTON_RIGHT)
 			{
@@ -130,6 +140,10 @@ void Game::Render()
 	else if (m_State == InGame)
 	{
 		RenderGameUI();
+	}
+	else if (m_State == InEndMenu)
+	{
+		RenderEndMenuUI();
 	}
 
 	SDL_RenderPresent(Window.Renderer);
@@ -206,6 +220,15 @@ void Game::ConstructGameUI()
 	m_Sudoku = std::make_unique<Sudoku>();
 }
 
+void Game::ConstructEndMenuUI()
+{
+	m_EndMenuElements.emplace("Title", std::make_unique<Button>(400, 100, 0, 150, 0.5f, 0.0f, 0.5f, 0.0f));
+	m_EndMenuElements["Title"]->SetColour(SDL_Color(0, 0, 0, 0));
+	m_EndMenuElements["Title"]->SetText("Game Over");
+	m_EndMenuElements["Title"]->SetFontSize(100);
+	m_EndMenuElements["Title"]->SetFocusable(false);
+}
+
 void Game::RenderMenuUI()
 {
 	for (const auto& Button : m_MenuElements)
@@ -225,6 +248,14 @@ void Game::RenderGameUI()
 	}
 }
 
+void Game::RenderEndMenuUI()
+{
+	for (const auto& Button : m_EndMenuElements)
+	{
+		Button.second->Render();
+	}
+}
+
 void Game::UpdateMenuUI()
 {
 	for (const auto& Button : m_MenuElements)
@@ -239,6 +270,14 @@ void Game::UpdateGameUI()
 	m_SidePanel->Update();
 
 	for (const auto& Button : m_GameElements)
+	{
+		Button.second->Update();
+	}
+}
+
+void Game::UpdateEndMenuUI()
+{
+	for (const auto& Button : m_EndMenuElements)
 	{
 		Button.second->Update();
 	}

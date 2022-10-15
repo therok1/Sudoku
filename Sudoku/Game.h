@@ -20,7 +20,8 @@ enum GameState
 {
 	InGame,
 	InMenu,
-	InSettings
+	InSettings,
+	InEndMenu
 };
 
 class Game
@@ -38,12 +39,15 @@ public:
 
 	void ConstructMenuUI();
 	void ConstructGameUI();
+	void ConstructEndMenuUI();
 
 	void RenderMenuUI();
 	void RenderGameUI();
+	void RenderEndMenuUI();
 
 	void UpdateMenuUI();
 	void UpdateGameUI();
+	void UpdateEndMenuUI();
 
 	// Getter Functions
 
@@ -63,9 +67,13 @@ private:
 
 	std::map<std::string, std::unique_ptr<Button>> m_MenuElements;
 
-	// In-Game Buttons
+	// Game Buttons
 
 	std::map<std::string, std::unique_ptr<Button>> m_GameElements;
+
+	// End Game Buttons
+
+	std::map<std::string, std::unique_ptr<Button>> m_EndMenuElements;
 
 	// Sudoku Grid
 
