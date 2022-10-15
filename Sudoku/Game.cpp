@@ -171,7 +171,11 @@ void Game::Render()
 	{
 		RenderEndMenuUI();
 	}
-
+	else if (m_State == InLoadingScreen)
+	{
+		RenderEndMenuUI();
+	}
+	
 	SDL_RenderPresent(Window.Renderer);
 }
 
@@ -256,7 +260,6 @@ void Game::ConstructEndMenuUI()
 	m_EndMenuElements["Message"]->SetColour(SDL_Color(0, 0, 0, 0));
 	m_EndMenuElements["Message"]->SetText("Message");
 	m_EndMenuElements["Message"]->SetFontSize(25);
-	//m_EndMenuElements["Message"]->SetFont("Assets/Fonts/UniSansThin.ttf");
 	m_EndMenuElements["Message"]->SetFocusable(false);
 	
 	m_EndMenuElements.emplace("Stats", std::make_unique<Button>(400, 100, 0, 230, 0.5f, 0.0f, 0.5f, 0.0f));

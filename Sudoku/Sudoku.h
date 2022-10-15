@@ -23,9 +23,11 @@ public:
 	void CountSolutions(int& Number);
 	void GeneratePuzzle();
 	void CalculateDifficulty();
-	int BranchDifficultyScore();
+
 	bool SolveGrid();
 	bool VerifyGridStatus();
+
+	int BranchDifficultyScore();
 
 	// Getter Functions
 

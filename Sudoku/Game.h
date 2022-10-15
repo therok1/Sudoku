@@ -21,7 +21,8 @@ enum GameState
 	InGame,
 	InMenu,
 	InSettings,
-	InEndMenu
+	InEndMenu,
+	InLoadingScreen
 };
 
 class Game
