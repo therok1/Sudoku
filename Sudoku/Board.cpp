@@ -96,6 +96,7 @@ void Board::FillBoard(const std::array<std::array<int, 9>, 9>& Sudoku, const std
 		for (int i = 0; i < m_Size; i++)
 		{
 			m_Buttons[Index]->SetText((Sudoku[j][i] == 0) ? " " : std::to_string(Sudoku[j][i]));
+			m_Buttons[Index]->SetTextColour(SDL_Color(0, 0, 0, 255));
 
 			Index++;
 		}
@@ -244,4 +245,9 @@ void Board::SetAnchorPoint(float AnchorX, float AnchorY)
 	
 	SetX(m_Position.GetX());
 	SetY(m_Position.GetY());
+}
+
+const std::array<std::array<int, 9>, 9>& Board::GetSudoku() const
+{
+	return m_Sudoku;
 }

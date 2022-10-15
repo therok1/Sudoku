@@ -49,9 +49,12 @@ public:
 	void UpdateGameUI();
 	void UpdateEndMenuUI();
 
+	void InitSudoku();
+
 	// Getter Functions
 
 	bool GetRunning() const;
+	std::chrono::seconds GetGameTime() const;
 
 private:
 
@@ -62,6 +65,8 @@ private:
 	bool m_Running;
 	GameState m_State;
 	std::chrono::steady_clock::time_point m_GameStart;
+
+	std::map<Uint8, std::string> m_Messages;
 
 	// Menu Buttons
 

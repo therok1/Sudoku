@@ -31,10 +31,7 @@ void Game::Tick()
 	{
 		UpdateGameUI();
 
-		std::chrono::steady_clock::duration TimeElapsed = std::chrono::steady_clock::now() - m_GameStart;
-		std::chrono::seconds Seconds = std::chrono::duration_cast<std::chrono::seconds>(TimeElapsed);
-
-		m_GameElements["Stats"]->SetText(std::format("{:%T} - {} / 3 {}", std::chrono::round<std::chrono::seconds>(std::chrono::duration<int>{ Seconds.count() }), m_Mistakes, m_Mistakes == 1 ? "Mistake" : "Mistakes"));
+		m_GameElements["Stats"]->SetText(std::format("{:%T} - {} / 3 {}", std::chrono::round<std::chrono::seconds>(std::chrono::duration<int>{ GetGameTime().count() }), m_Mistakes, m_Mistakes == 1 ? "Mistake" : "Mistakes"));
 		
 		m_GameElements["Selected"]->SetText(m_Selected ? std::to_string(m_Selected) : "CLR");
 		m_GameElements["Selected"]->SetFitText();
@@ -79,18 +76,7 @@ void Game::EventLoop()
 			{
 				if (m_MenuElements["Start"]->MouseRelease(m_State, InMenu))
 				{
-					m_Sudoku->CreateSeed();
-					m_Sudoku->GeneratePuzzle();
-					m_Sudoku->CalculateDifficulty();
-					
-					std::array<std::array<int, 9>, 9> Puzzle = m_Sudoku->GetGrid();
-					std::array<std::array<int, 9>, 9> PuzzleSolution = m_Sudoku->GetSolutionGrid();
-					
-					m_Grid->FillBoard(Puzzle, PuzzleSolution);
-
-					m_State = InGame;
-
-					m_GameStart = std::chrono::steady_clock::now();
+					InitSudoku();
 
 					break;
 				}
@@ -107,12 +93,52 @@ void Game::EventLoop()
 					break;
 				}
 
+				if (m_EndMenuElements["Start"]->MouseRelease(m_State, InEndMenu))
+				{
+					InitSudoku();
+
+					break;
+				}
+
+				if (m_EndMenuElements["Menu"]->MouseRelease(m_State, InEndMenu))
+				{
+					m_State = InMenu;
+
+					break;
+				}
+
+				if (m_EndMenuElements["Quit"]->MouseRelease(m_State, InEndMenu))
+				{
+					m_Running = false;
+
+					break;
+				}
+
 				m_Grid->FillCell(m_State, InGame, m_Selected, m_Mistakes);
 				m_SidePanel->Select(m_State, InGame, m_Selected);
 
-				if (m_Mistakes > 3)
+				if (m_State == InGame)
 				{
-					m_State = InEndMenu;
+					if (m_Mistakes > 3)
+					{
+						m_State = InEndMenu;
+
+						m_EndMenuElements["Title"]->SetText("Game Over");
+						m_EndMenuElements["Message"]->SetText("You have made 3 mistakes and lost this game");
+						m_EndMenuElements["Stats"]->SetText(std::format("{:%T}", std::chrono::round<std::chrono::seconds>(std::chrono::duration<int>{ GetGameTime().count() })));
+
+						break;
+					}
+					else if (m_Grid->GetSudoku() == m_Sudoku->GetSolutionGrid())
+					{
+						m_State = InEndMenu;
+
+						m_EndMenuElements["Title"]->SetText("Congratulations");
+						m_EndMenuElements["Message"]->SetText("You have completed sudoku");
+						m_EndMenuElements["Stats"]->SetText(std::format("{:%T}", std::chrono::round<std::chrono::seconds>(std::chrono::duration<int>{ GetGameTime().count() })));
+
+						break;
+					}
 				}
 			}
 			else if (Event.button.button == SDL_BUTTON_RIGHT)
@@ -160,15 +186,15 @@ void Game::ConstructMenuUI()
 	m_MenuElements.emplace("Credits", std::make_unique<Button>(400, 100, 0, 200, 0.5f, 0.0f, 0.5f, 0.0f));
 	m_MenuElements["Credits"]->SetColour(SDL_Color(0, 0, 0, 0));
 	m_MenuElements["Credits"]->SetText("By @therok1");
-	m_MenuElements["Credits"]->SetFontSize(30);
+	m_MenuElements["Credits"]->SetFontSize(25);
 	m_MenuElements["Credits"]->SetFont("Assets/Fonts/UniSansThin.ttf");
 	m_MenuElements["Credits"]->SetFocusable(false);
 
 	m_MenuElements.emplace("Start", std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f));
-	m_MenuElements["Start"]->SetColour(SDL_Color(230, 230, 230, 255));
+	m_MenuElements["Start"]->SetColour(SDL_Color(140, 188, 255, 255));
 	m_MenuElements["Start"]->SetText("Start");
 	m_MenuElements["Start"]->SetFontSize(20);
-	m_MenuElements["Start"]->SetTextColour(SDL_Color(0, 0, 0, 255));
+	m_MenuElements["Start"]->SetTextColour(SDL_Color(255, 255, 255, 255));
 
 	m_MenuElements.emplace("Settings", std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f));
 	m_MenuElements["Settings"]->SetColour(SDL_Color(230, 230, 230, 255));
@@ -216,8 +242,6 @@ void Game::ConstructGameUI()
 	m_SidePanel->SetX(0, true, 0.5f);
 	m_SidePanel->SetY(0, true, 0.9f);
 	m_SidePanel->SetAnchorPoint(0.5f, 1.0f);
-
-	m_Sudoku = std::make_unique<Sudoku>();
 }
 
 void Game::ConstructEndMenuUI()
@@ -227,6 +251,38 @@ void Game::ConstructEndMenuUI()
 	m_EndMenuElements["Title"]->SetText("Game Over");
 	m_EndMenuElements["Title"]->SetFontSize(100);
 	m_EndMenuElements["Title"]->SetFocusable(false);
+
+	m_EndMenuElements.emplace("Message", std::make_unique<Button>(400, 100, 0, 200, 0.5f, 0.0f, 0.5f, 0.0f));
+	m_EndMenuElements["Message"]->SetColour(SDL_Color(0, 0, 0, 0));
+	m_EndMenuElements["Message"]->SetText("Message");
+	m_EndMenuElements["Message"]->SetFontSize(25);
+	//m_EndMenuElements["Message"]->SetFont("Assets/Fonts/UniSansThin.ttf");
+	m_EndMenuElements["Message"]->SetFocusable(false);
+	
+	m_EndMenuElements.emplace("Stats", std::make_unique<Button>(400, 100, 0, 230, 0.5f, 0.0f, 0.5f, 0.0f));
+	m_EndMenuElements["Stats"]->SetColour(SDL_Color(0, 0, 0, 0));
+	m_EndMenuElements["Stats"]->SetText("Message");
+	m_EndMenuElements["Stats"]->SetFontSize(20);
+	m_EndMenuElements["Stats"]->SetFont("Assets/Fonts/UniSansThin.ttf");
+	m_EndMenuElements["Stats"]->SetFocusable(false);
+
+	m_EndMenuElements.emplace("Start", std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.5f));
+	m_EndMenuElements["Start"]->SetColour(SDL_Color(140, 188, 255, 255));
+	m_EndMenuElements["Start"]->SetText("New Game");
+	m_EndMenuElements["Start"]->SetFontSize(20);
+	m_EndMenuElements["Start"]->SetTextColour(SDL_Color(255, 255, 255, 255));
+
+	m_EndMenuElements.emplace("Menu", std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.6f));
+	m_EndMenuElements["Menu"]->SetColour(SDL_Color(230, 230, 230, 255));
+	m_EndMenuElements["Menu"]->SetText("Home");
+	m_EndMenuElements["Menu"]->SetFontSize(20);
+	m_EndMenuElements["Menu"]->SetTextColour(SDL_Color(0, 0, 0, 255));
+
+	m_EndMenuElements.emplace("Quit", std::make_unique<Button>(200, 50, 0, 0, 0.5f, 0.5f, 0.5f, 0.7f));
+	m_EndMenuElements["Quit"]->SetColour(SDL_Color(230, 230, 230, 255));
+	m_EndMenuElements["Quit"]->SetText("Quit");
+	m_EndMenuElements["Quit"]->SetFontSize(20);
+	m_EndMenuElements["Quit"]->SetTextColour(SDL_Color(0, 0, 0, 255));
 }
 
 void Game::RenderMenuUI()
@@ -283,8 +339,35 @@ void Game::UpdateEndMenuUI()
 	}
 }
 
+void Game::InitSudoku()
+{
+	m_Sudoku.reset();
+
+	m_Mistakes = 0;
+	m_Selected = 0;
+
+	m_Sudoku = std::make_unique<Sudoku>();
+	m_Sudoku->CreateSeed();
+	m_Sudoku->GeneratePuzzle();
+	m_Sudoku->CalculateDifficulty();
+
+	m_Grid->FillBoard(m_Sudoku->GetGrid(), m_Sudoku->GetSolutionGrid());
+
+	m_State = InGame;
+
+	m_GameStart = std::chrono::steady_clock::now();
+}
+
 bool Game::GetRunning() const
 {
 	return m_Running;
+}
+
+std::chrono::seconds Game::GetGameTime() const
+{
+	std::chrono::steady_clock::duration TimeElapsed = std::chrono::steady_clock::now() - m_GameStart;
+	std::chrono::seconds Seconds = std::chrono::duration_cast<std::chrono::seconds>(TimeElapsed);
+
+	return Seconds;
 }
  

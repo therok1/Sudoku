@@ -33,6 +33,10 @@ public:
 	void SetY(int PositionY, bool A = false, float PercentY = 0.0f);
 	void SetAnchorPoint(float AnchorX, float AnchorY);
 
+	// Getter Functions
+
+	const std::array<std::array<int, 9>, 9>& GetSudoku() const;
+
 private:
 
 	std::vector<std::unique_ptr<Button>> m_Buttons;
