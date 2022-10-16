@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include <string>
 #include <memory>
+#include <string_view>
 
 #include "DynamicText.h"
 
@@ -25,9 +26,9 @@ public:
 	
 	// Setter Functions
 
-	void SetText(const std::string& Text);
+	void SetText(std::string_view Text);
 	void SetFontSize(int FontSize);
-	void SetFont(const std::string& FontPath);
+	void SetFont(std::string_view FontPath);
 	void SetFocusable(bool Focusable);
 	void SetX(int PositionX);
 	void SetY(int PositionY);

@@ -14,7 +14,7 @@ class Sudoku
 public:
 
 	Sudoku();
-	Sudoku(const std::string& GridString, bool RowMajor = true);
+	Sudoku(std::string_view GridString, bool RowMajor = true);
 
 	// Main Functions
 

@@ -134,7 +134,7 @@ bool Button::MouseRelease(enum GameState State, enum GameState DesiredState)
 	return ((State == DesiredState) && m_Focusable) ? SDL_PointInRect(&Mouse.MouseCoords, &dst) : false;
 }
 
-void Button::SetText(const std::string& Text)
+void Button::SetText(std::string_view Text)
 {
 	m_Text->SetText(Text);
 
@@ -148,7 +148,7 @@ void Button::SetFontSize(int FontSize)
 	Refresh();
 }
 
-void Button::SetFont(const std::string& FontPath)
+void Button::SetFont(std::string_view FontPath)
 {
 	m_Text->SetFont(FontPath);
 

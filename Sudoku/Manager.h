@@ -17,6 +17,7 @@ namespace Manager
 		SDL_Renderer* Renderer = nullptr;
 
 		std::string Title = "SDL Desktop App";
+
 		int Width = 1280;
 		int Height = 720;
 	};

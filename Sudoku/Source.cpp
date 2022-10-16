@@ -5,7 +5,6 @@
 #include <time.h>
 
 #include "Game.h"
-#include "Manager.h"
 
 bool Init();
 void Quit();

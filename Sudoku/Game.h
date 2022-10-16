@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <SDL.h>
-#include <vector>
 #include <map>
 #include <string>
 #include <memory>
@@ -21,8 +20,7 @@ enum GameState
 	InGame,
 	InMenu,
 	InSettings,
-	InEndMenu,
-	InLoadingScreen
+	InEndMenu
 };
 
 class Game

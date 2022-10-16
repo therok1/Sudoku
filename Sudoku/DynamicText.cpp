@@ -20,7 +20,7 @@ DynamicText::DynamicText()
 	}
 }
 
-DynamicText::DynamicText(int PositionX, int PositionY, const std::string& Message, int FontSize, const std::string& FontPath, SDL_Color Colour)
+DynamicText::DynamicText(int PositionX, int PositionY, std::string_view Message, int FontSize, std::string_view FontPath, SDL_Color Colour)
 {
 	m_Message = Message;
 	m_FontSize = FontSize;
@@ -32,7 +32,7 @@ DynamicText::DynamicText(int PositionX, int PositionY, const std::string& Messag
 	dst.w = 200;
 	dst.h = 50;
 
-	m_Font = TTF_OpenFont(FontPath.c_str(), FontSize);
+	m_Font = TTF_OpenFont(m_FontPath.c_str(), FontSize);
 
 	if (m_Font == nullptr)
 	{
@@ -82,7 +82,7 @@ void DynamicText::Render()
 	}
 }
 
-void DynamicText::SetText(const std::string& Text)
+void DynamicText::SetText(std::string_view Text)
 {
 	m_Message = Text;
 }
@@ -99,7 +99,7 @@ void DynamicText::SetFontSize(int FontSize)
 	m_Font = TTF_OpenFont(m_FontPath.c_str(), m_FontSize);
 }
 
-void DynamicText::SetFont(const std::string& FontPath)
+void DynamicText::SetFont(std::string_view FontPath)
 {
 	m_FontPath = FontPath;
 

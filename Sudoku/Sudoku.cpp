@@ -134,7 +134,7 @@ Sudoku::Sudoku()
 	m_GridStatus = true;
 }
 
-Sudoku::Sudoku(const std::string& GridString, bool RowMajor)
+Sudoku::Sudoku(std::string_view GridString, bool RowMajor)
 {
 	m_DifficultyLevel = 0;
 	m_Grid = { 0 };
