@@ -171,10 +171,6 @@ void Game::Render()
 	{
 		RenderEndMenuUI();
 	}
-	else if (m_State == InLoadingScreen)
-	{
-		RenderEndMenuUI();
-	}
 	
 	SDL_RenderPresent(Window.Renderer);
 }
